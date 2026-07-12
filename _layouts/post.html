@@ -4,25 +4,29 @@ layout: default
 {%- assign is_writeup = false -%}
 {%- if page.categories contains 'writeups' -%}{%- assign is_writeup = true -%}{%- endif -%}
 
-<article class="wrap post">
-  <div class="post-back">
-    <a href="{% if is_writeup %}{{ '/writeups/' | relative_url }}{% else %}{{ '/blog/' | relative_url }}{% endif %}">&larr; back</a>
-  </div>
+<div class="post-layout">
+  <aside class="toc" id="toc" aria-label="On this page"></aside>
 
-  <h1 class="post-title">{{ page.title }}</h1>
-  <div class="post-meta">
-    <span>{{ page.date | date: "%Y-%m-%d" }}</span>
-    {%- if is_writeup and page.difficulty -%}<span class="diff-{{ page.difficulty | downcase }}">{{ page.difficulty | downcase }}</span>{%- endif -%}
-    {%- if is_writeup and page.os -%}<span>{{ page.os | downcase }}</span>{%- endif -%}
-    {%- if is_writeup and page.platform -%}<span>{{ page.platform }}</span>{%- endif -%}
-  </div>
+  <article class="post">
+    <div class="post-back">
+      <a href="{% if is_writeup %}{{ '/writeups/' | relative_url }}{% else %}{{ '/blog/' | relative_url }}{% endif %}">&larr; back</a>
+    </div>
 
-  <div class="md">
-    {{ content }}
-  </div>
+    <h1 class="post-title">{{ page.title }}</h1>
+    <div class="post-meta">
+      <span>{{ page.date | date: "%Y-%m-%d" }}</span>
+      {%- if is_writeup and page.difficulty -%}<span class="diff-{{ page.difficulty | downcase }}">{{ page.difficulty | downcase }}</span>{%- endif -%}
+      {%- if is_writeup and page.os -%}<span>{{ page.os | downcase }}</span>{%- endif -%}
+      {%- if is_writeup and page.platform -%}<span>{{ page.platform }}</span>{%- endif -%}
+    </div>
 
-  <nav class="post-nav">
-    {%- if page.previous.url -%}<a class="prv" href="{{ page.previous.url | relative_url }}">&larr; {{ page.previous.title }}</a>{%- endif -%}
-    {%- if page.next.url -%}<a class="nxt" href="{{ page.next.url | relative_url }}">{{ page.next.title }} &rarr;</a>{%- endif -%}
-  </nav>
-</article>
+    <div class="md">
+      {{ content }}
+    </div>
+
+    <nav class="post-nav">
+      {%- if page.previous.url -%}<a class="prv" href="{{ page.previous.url | relative_url }}">&larr; {{ page.previous.title }}</a>{%- endif -%}
+      {%- if page.next.url -%}<a class="nxt" href="{{ page.next.url | relative_url }}">{{ page.next.title }} &rarr;</a>{%- endif -%}
+    </nav>
+  </article>
+</div>

@@ -79,8 +79,40 @@ hr { border: none; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .empty { color: var(--faint); font-size: .95rem; padding: 1rem 0; }
 .empty code { font-family: var(--mono); font-size: .85em; }
 
+/* ── Post layout with left TOC ──────────────────────── */
+.post-layout {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.6rem 1.25rem 3rem;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 2.8rem;
+  align-items: start;
+}
+.post-layout .post { padding: 0; }
+
+.toc { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; }
+.toc-title { font-size: .7rem; text-transform: uppercase; letter-spacing: .13em; color: var(--faint); margin-bottom: .7rem; }
+.toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.toc li a {
+  display: block; padding: .22rem 0 .22rem .9rem; margin-left: -1px;
+  border-left: 2px solid transparent; color: var(--dim);
+  text-decoration: none; font-size: .84rem; line-height: 1.35;
+}
+.toc li a:hover { color: var(--head); }
+.toc li a.active { color: var(--head); border-left-color: var(--accent); }
+.toc .lvl-3 a { padding-left: 1.7rem; font-size: .8rem; color: var(--faint); }
+.toc .lvl-3 a:hover, .toc .lvl-3 a.active { color: var(--head); }
+
+.md h2, .md h3, .md h4 { scroll-margin-top: 1.5rem; }
+
+@media (max-width: 880px) {
+  .post-layout { grid-template-columns: minmax(0, 680px); justify-content: center; gap: 0; }
+  .toc { display: none; }
+}
+
 /* ── Page + post ────────────────────────────────────── */
-.page, .post { padding: 2.6rem 0 3rem; }
+.page { padding: 2.6rem 0 3rem; }
 .page-title { font-size: 1.6rem; color: var(--head); font-weight: 600; margin: 0 0 .3rem; }
 .page-subtitle { color: var(--dim); margin: 0 0 1.8rem; }
 
