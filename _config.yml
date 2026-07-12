@@ -1,0 +1,69 @@
+# ─────────────────────────────────────────────────────────────
+#  Site settings
+# ─────────────────────────────────────────────────────────────
+title:            "rask0l // security notes"
+tagline:          "HTB writeups, security research & build logs"
+description:      "Hack The Box writeups, CTF notes, security research, and progress logs by rask0l."
+author:           "Sereyrith (rask0l)"
+email:            "sereykunvuth@gmail.com"
+
+# ── URL config ───────────────────────────────────────────────
+# If your repo is named  <username>.github.io   →  baseurl: ""
+# If your repo is named  blog (a project site)  →  baseurl: "/blog"
+url:              "https://rask0l.github.io"
+baseurl:          ""
+
+# ── Social / links (shown in footer + head) ──────────────────
+github_user:      "rask0l"
+htb_user:         "your-htb-handle"       # optional, remove if unused
+twitter_user:     ""                       # optional
+
+# ─────────────────────────────────────────────────────────────
+#  Build settings
+# ─────────────────────────────────────────────────────────────
+markdown:         kramdown
+highlighter:      rouge
+permalink:        /:categories/:title/
+
+kramdown:
+  input:          GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class:    'highlight'
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Reading time / excerpt config
+excerpt_separator: "<!--more-->"
+
+# ── Collections-ish via categories ───────────────────────────
+# Writeups live in _posts with `category: writeups`
+# Blog posts live in _posts with `category: blog`
+
+# ── Default front matter ─────────────────────────────────────
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# ── Exclude from build ───────────────────────────────────────
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
+  - .sass-cache
+  - .jekyll-cache
+  - node_modules
+
+sass:
+  style: compressed

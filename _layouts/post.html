@@ -1,0 +1,61 @@
+---
+layout: default
+---
+{%- assign is_writeup = false -%}
+{%- if page.categories contains 'writeups' -%}{%- assign is_writeup = true -%}{%- endif -%}
+
+<article class="post {% if is_writeup %}post--writeup{% endif %}">
+  <div class="wrap wrap--narrow">
+
+    <div class="post-back">
+      <a href="{% if is_writeup %}{{ '/writeups/' | relative_url }}{% else %}{{ '/blog/' | relative_url }}{% endif %}">← cd ..</a>
+    </div>
+
+    <header class="post-header">
+      {%- if is_writeup and page.difficulty -%}
+      <div class="badges">
+        <span class="badge badge--diff diff-{{ page.difficulty | downcase }}">{{ page.difficulty }}</span>
+        {%- if page.os -%}<span class="badge badge--os os-{{ page.os | downcase }}">{{ page.os }}</span>{%- endif -%}
+        {%- if page.platform -%}<span class="badge">{{ page.platform }}</span>{%- endif -%}
+        {%- if page.points -%}<span class="badge">{{ page.points }} pts</span>{%- endif -%}
+        {%- if page.status -%}<span class="badge badge--status">{{ page.status }}</span>{%- endif -%}
+      </div>
+      {%- endif -%}
+
+      <h1 class="post-title">{{ page.title }}</h1>
+
+      <div class="post-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>
+        <span class="dot">·</span>
+        <span>{% assign words = content | number_of_words %}{{ words | divided_by: 200 | plus: 1 }} min read</span>
+        {%- if page.tags and page.tags != empty -%}
+        <span class="dot">·</span>
+        <span class="post-tags">
+          {%- for tag in page.tags -%}<span class="tag">#{{ tag }}</span>{%- endfor -%}
+        </span>
+        {%- endif -%}
+      </div>
+    </header>
+
+    <div class="post-body markdown">
+      {{ content }}
+    </div>
+
+    <footer class="post-footer">
+      <div class="post-nav">
+        {%- if page.previous.url -%}
+        <a class="pn pn--prev" href="{{ page.previous.url | relative_url }}">
+          <span class="pn-label">← prev</span>
+          <span class="pn-title">{{ page.previous.title }}</span>
+        </a>
+        {%- endif -%}
+        {%- if page.next.url -%}
+        <a class="pn pn--next" href="{{ page.next.url | relative_url }}">
+          <span class="pn-label">next →</span>
+          <span class="pn-title">{{ page.next.title }}</span>
+        </a>
+        {%- endif -%}
+      </div>
+    </footer>
+  </div>
+</article>

@@ -1,0 +1,31 @@
+---
+layout: default
+title: blog
+permalink: /blog/
+---
+{%- assign blogposts = site.posts | where_exp: "p", "p.categories contains 'blog'" -%}
+
+<div class="wrap wrap--narrow page">
+  <header class="page-header">
+    <h1 class="page-title"><span class="accent">$</span> cat ./blog/*</h1>
+    <p class="page-subtitle">Ideas, research notes, tooling, and progress logs. Less polished than the writeups — more thinking out loud.</p>
+  </header>
+
+  <div class="post-list">
+    {%- for post in blogposts -%}
+    <article class="post-list-item">
+      <time class="pli-date">{{ post.date | date: "%Y-%m-%d" }}</time>
+      <div class="pli-body">
+        <h2 class="pli-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        <p class="pli-excerpt">{{ post.description | default: post.excerpt | strip_html | truncate: 180 }}</p>
+        {%- if post.tags and post.tags != empty -%}
+        <div class="pli-tags">{%- for tag in post.tags -%}<span class="tag">#{{ tag }}</span>{%- endfor -%}</div>
+        {%- endif -%}
+      </div>
+    </article>
+    {%- endfor -%}
+    {%- if blogposts.size == 0 -%}
+    <p class="empty">No posts yet. Add one at <code>_posts/YYYY-MM-DD-name.md</code> with <code>category: blog</code>.</p>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,51 @@
+---
+layout: default
+title: writeups
+permalink: /writeups/
+---
+{%- assign writeups = site.posts | where_exp: "p", "p.categories contains 'writeups'" -%}
+
+<div class="wrap page">
+  <header class="page-header">
+    <h1 class="page-title"><span class="accent">$</span> ls ./writeups</h1>
+    <p class="page-subtitle">{{ writeups | size }} machine{% if writeups.size != 1 %}s{% endif %} broken down — enumeration, exploitation, privesc, and lessons learned.</p>
+  </header>
+
+  <div class="filters" id="filters">
+    <button class="filter active" data-filter="all">all</button>
+    <button class="filter" data-filter="easy">easy</button>
+    <button class="filter" data-filter="medium">medium</button>
+    <button class="filter" data-filter="hard">hard</button>
+    <button class="filter" data-filter="insane">insane</button>
+    <input type="search" id="search" class="filter-search" placeholder="grep writeups…" aria-label="Search writeups">
+  </div>
+
+  <div class="card-grid" id="writeup-grid">
+    {%- for post in writeups -%}
+    <a class="card js-item"
+       href="{{ post.url | relative_url }}"
+       data-diff="{{ post.difficulty | downcase }}"
+       data-title="{{ post.title | downcase }}"
+       data-tags="{{ post.tags | join: ' ' | downcase }}">
+      <div class="card-top">
+        {%- if post.difficulty -%}<span class="badge badge--diff diff-{{ post.difficulty | downcase }}">{{ post.difficulty }}</span>{%- endif -%}
+        {%- if post.os -%}<span class="badge badge--os os-{{ post.os | downcase }}">{{ post.os }}</span>{%- endif -%}
+        {%- if post.status == 'Owned' -%}<span class="badge badge--owned">✓ owned</span>{%- endif -%}
+      </div>
+      <h3 class="card-title">{{ post.title }}</h3>
+      <p class="card-excerpt">{{ post.description | default: post.excerpt | strip_html | truncate: 120 }}</p>
+      <div class="card-foot">
+        <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+        {%- if post.tags and post.tags != empty -%}
+        <span class="card-tags">{%- for tag in post.tags limit: 3 -%}<span class="tag">#{{ tag }}</span>{%- endfor -%}</span>
+        {%- endif -%}
+      </div>
+    </a>
+    {%- endfor -%}
+  </div>
+
+  {%- if writeups.size == 0 -%}
+  <p class="empty">No writeups yet. Add one at <code>_posts/YYYY-MM-DD-name.md</code> with <code>category: writeups</code>.</p>
+  {%- endif -%}
+  <p class="empty" id="no-results" hidden>No writeups match that filter.</p>
+</div>
