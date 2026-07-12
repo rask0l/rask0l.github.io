@@ -4,82 +4,44 @@ title: null
 ---
 {%- assign writeups = site.posts | where_exp: "p", "p.categories contains 'writeups'" -%}
 {%- assign blogposts = site.posts | where_exp: "p", "p.categories contains 'blog'" -%}
-{%- assign owned = writeups | where: "status", "Owned" -%}
 
-<section class="hero">
-  <div class="wrap">
-    <div class="terminal" aria-hidden="true">
-      <div class="terminal-bar">
-        <span class="tdot tdot--r"></span><span class="tdot tdot--y"></span><span class="tdot tdot--g"></span>
-        <span class="terminal-title">rask0l@box: ~/notes</span>
-      </div>
-      <div class="terminal-body">
-        <p class="tline"><span class="tprompt">┌──(rask0l㉿box)-[~]</span></p>
-        <p class="tline"><span class="tprompt">└─$</span> <span class="type" data-type="whoami --intro"></span><span class="tcursor">▋</span></p>
-        <p class="tout" id="hero-out"></p>
-      </div>
+<div class="wrap">
+  <section class="intro">
+    <h1>rask0l</h1>
+    <p>I'm Sereyrith. I do Hack The Box, CTFs, and web security. This is where I keep my notes.</p>
+    <p class="lede">Writeups are full walkthroughs of boxes I've rooted. The blog is looser &mdash; things I'm reading, tools, and half-formed ideas.</p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head">
+      <h2>Writeups</h2>
+      <a href="{{ '/writeups/' | relative_url }}">all &rarr;</a>
     </div>
+    <ul class="entries">
+      {%- for post in writeups limit: 6 -%}
+      <li class="entry">
+        <span class="entry-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <a class="entry-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        {%- if post.difficulty -%}<span class="entry-meta diff-{{ post.difficulty | downcase }}">{{ post.difficulty | downcase }}</span>{%- endif -%}
+      </li>
+      {%- endfor -%}
+      {%- if writeups.size == 0 -%}<li class="empty">Nothing here yet.</li>{%- endif -%}
+    </ul>
+  </section>
 
-    <div class="hero-copy">
-      <h1 class="hero-title">Security notes,<br><span class="accent">documented in the open.</span></h1>
-      <p class="hero-sub">Hack The Box writeups, CTF notes, and research logs. I break machines, then write down exactly how — enumeration to root.</p>
-      <div class="hero-cta">
-        <a class="btn btn--primary" href="{{ '/writeups/' | relative_url }}">Browse writeups →</a>
-        <a class="btn btn--ghost" href="{{ '/blog/' | relative_url }}">Read the blog</a>
-      </div>
+  <section class="sec">
+    <div class="sec-head">
+      <h2>Blog</h2>
+      <a href="{{ '/blog/' | relative_url }}">all &rarr;</a>
     </div>
-  </div>
-</section>
-
-<section class="stats wrap">
-  <div class="stat">
-    <span class="stat-num">{{ writeups | size }}</span>
-    <span class="stat-label">writeups</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num">{{ owned | size }}</span>
-    <span class="stat-label">machines owned</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num">{{ blogposts | size }}</span>
-    <span class="stat-label">blog posts</span>
-  </div>
-  <div class="stat">
-    <span class="stat-num">∞</span>
-    <span class="stat-label">rabbit holes</span>
-  </div>
-</section>
-
-<section class="wrap section">
-  <div class="section-head">
-    <h2 class="section-title"><span class="accent">##</span> latest writeups</h2>
-    <a class="section-more" href="{{ '/writeups/' | relative_url }}">view all →</a>
-  </div>
-  <div class="card-grid">
-    {%- for post in writeups limit: 4 -%}
-      {% include writeup-card.html post=post %}
-    {%- endfor -%}
-    {%- if writeups.size == 0 -%}
-      <p class="empty">No writeups yet — drop a markdown file in <code>_posts/</code> to begin.</p>
-    {%- endif -%}
-  </div>
-</section>
-
-<section class="wrap section">
-  <div class="section-head">
-    <h2 class="section-title"><span class="accent">##</span> from the blog</h2>
-    <a class="section-more" href="{{ '/blog/' | relative_url }}">view all →</a>
-  </div>
-  <div class="list">
-    {%- for post in blogposts limit: 4 -%}
-    <a class="list-row" href="{{ post.url | relative_url }}">
-      <time class="list-date">{{ post.date | date: "%Y-%m-%d" }}</time>
-      <span class="list-title">{{ post.title }}</span>
-      <span class="list-arrow">→</span>
-    </a>
-    {%- endfor -%}
-    {%- if blogposts.size == 0 -%}
-      <p class="empty">No posts yet.</p>
-    {%- endif -%}
-  </div>
-</section>
+    <ul class="entries">
+      {%- for post in blogposts limit: 6 -%}
+      <li class="entry">
+        <span class="entry-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <a class="entry-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </li>
+      {%- endfor -%}
+      {%- if blogposts.size == 0 -%}<li class="empty">Nothing here yet.</li>{%- endif -%}
+    </ul>
+  </section>
+</div>

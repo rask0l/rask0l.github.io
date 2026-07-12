@@ -1,37 +1,20 @@
 ---
 layout: page
-title: whoami
-subtitle: The human behind the terminal.
+title: About
 permalink: /about/
 ---
 
-Hi — I'm **rask0l**. I'm into offensive security: Hack The Box, CTFs, and generally
-figuring out how things break so I can understand how they're built.
+I'm Sereyrith, though most places online I go by rask0l.
 
-This site is my public lab notebook. Two kinds of things live here:
+I'm into offensive security — mostly Hack The Box and CTFs right now, with a
+soft spot for web. I like taking things apart to understand how they work.
 
-- **[Writeups]({{ '/writeups/' | relative_url }})** — full walkthroughs of boxes I've rooted,
-  from initial `nmap` to the final flag. Clean, reproducible, and honest about the dead ends.
-- **[Blog]({{ '/blog/' | relative_url }})** — ideas, tooling, research notes, and
-  [progress logs]({{ '/progress/' | relative_url }}).
+This site is where I write things down. Two reasons: I remember things better
+when I explain them, and a good writeup has saved me more than once when I was
+stuck at 2am. Figured I'd return the favour.
 
-## Why write it down?
+Everything here is on machines I'm allowed to attack — HTB, CTFs, and my own lab.
+Don't point any of it at things you don't own.
 
-You don't really understand an exploit until you can explain it. Writing forces
-clarity, and hopefully the notes help someone else who's stuck at 2am on the same box.
-
-## The rules I write by
-
-- **Educational use only.** Everything here is on machines I'm authorized to attack
-  (HTB / CTF / my own lab). Don't point these techniques at things you don't own.
-- **No skipped steps.** If it worked, the exact command is here.
-- **Credit where due.** Tools and prior writeups get linked.
-
-## Reach me
-
-- GitHub: [@{{ site.github_user }}](https://github.com/{{ site.github_user }})
-- Email: [{{ site.email }}](mailto:{{ site.email }})
-
----
-
-> `$ exit` — thanks for reading. Go root something.
+You can find me on [GitHub]({% if site.github_user %}https://github.com/{{ site.github_user }}{% endif %})
+or reach me at [{{ site.email }}](mailto:{{ site.email }}).

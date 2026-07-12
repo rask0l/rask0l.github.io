@@ -1,21 +1,11 @@
 <footer class="site-footer">
-  <div class="wrap footer-inner">
-    <div class="footer-col">
-      <span class="footer-brand">rask0l<span class="accent">::</span>notes</span>
-      <p class="footer-tag">{{ site.tagline }}</p>
-    </div>
-    <div class="footer-links">
+  <div class="wrap">
+    <span>© {{ 'now' | date: "%Y" }} rask0l</span>
+    <span class="footer-links">
       {%- if site.github_user and site.github_user != 'your-username' -%}
-      <a href="https://github.com/{{ site.github_user }}" target="_blank" rel="noopener">github</a>
-      {%- endif -%}
-      {%- if site.htb_user and site.htb_user != 'your-htb-handle' -%}
-      <a href="https://app.hackthebox.com/profile" target="_blank" rel="noopener">hackthebox</a>
+      <a href="https://github.com/{{ site.github_user }}">github</a>
       {%- endif -%}
       <a href="{{ '/feed.xml' | relative_url }}">rss</a>
-    </div>
-    <p class="footer-legal">
-      <span class="muted"># built with jekyll · hosted on github pages</span><br>
-      <span class="muted">© {{ 'now' | date: "%Y" }} {{ site.author }}. all payloads for educational use only.</span>
-    </p>
+    </span>
   </div>
 </footer>

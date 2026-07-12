@@ -1,21 +1,11 @@
 <header class="site-header">
-  <div class="wrap nav-inner">
-    <a class="brand" href="{{ '/' | relative_url }}">
-      <span class="brand-prompt">rask0l@box</span><span class="brand-sep">:</span><span class="brand-path">~</span><span class="brand-cursor">$</span>
-    </a>
-
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
-    <label for="nav-toggle" class="nav-burger" aria-label="Menu"><span></span><span></span><span></span></label>
-
+  <div class="wrap">
+    <a class="brand" href="{{ '/' | relative_url }}">rask0l</a>
     <nav class="site-nav">
       {%- assign p = page.url -%}
-      <a href="{{ '/writeups/' | relative_url }}" class="{% if p contains '/writeups' %}active{% endif %}">./writeups</a>
-      <a href="{{ '/blog/' | relative_url }}" class="{% if p contains '/blog' %}active{% endif %}">./blog</a>
-      <a href="{{ '/progress/' | relative_url }}" class="{% if p contains '/progress' %}active{% endif %}">./progress</a>
-      <a href="{{ '/about/' | relative_url }}" class="{% if p contains '/about' %}active{% endif %}">./about</a>
-      {%- if site.github_user and site.github_user != 'your-username' -%}
-      <a href="https://github.com/{{ site.github_user }}" class="ext" target="_blank" rel="noopener">github ↗</a>
-      {%- endif -%}
+      <a href="{{ '/writeups/' | relative_url }}" class="{% if p contains '/writeups' %}active{% endif %}">writeups</a>
+      <a href="{{ '/blog/' | relative_url }}" class="{% if p contains '/blog' %}active{% endif %}">blog</a>
+      <a href="{{ '/about/' | relative_url }}" class="{% if p contains '/about' %}active{% endif %}">about</a>
     </nav>
   </div>
 </header>

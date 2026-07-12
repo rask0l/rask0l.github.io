@@ -1,14 +1,12 @@
 ---
 layout: default
 ---
-<div class="wrap wrap--narrow page">
+<div class="wrap page">
   {%- if page.title -%}
-  <header class="page-header">
-    <h1 class="page-title"><span class="accent">$</span> {{ page.title }}</h1>
-    {%- if page.subtitle -%}<p class="page-subtitle">{{ page.subtitle }}</p>{%- endif -%}
-  </header>
+  <h1 class="page-title">{{ page.title }}</h1>
+  {%- if page.subtitle -%}<p class="page-subtitle">{{ page.subtitle }}</p>{%- endif -%}
   {%- endif -%}
-  <div class="markdown">
+  <div class="md">
     {{ content }}
   </div>
 </div>

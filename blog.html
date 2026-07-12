@@ -5,27 +5,19 @@ permalink: /blog/
 ---
 {%- assign blogposts = site.posts | where_exp: "p", "p.categories contains 'blog'" -%}
 
-<div class="wrap wrap--narrow page">
-  <header class="page-header">
-    <h1 class="page-title"><span class="accent">$</span> cat ./blog/*</h1>
-    <p class="page-subtitle">Ideas, research notes, tooling, and progress logs. Less polished than the writeups — more thinking out loud.</p>
-  </header>
+<div class="wrap page">
+  <h1 class="page-title">Blog</h1>
+  <p class="page-subtitle">Notes, tools, and thinking out loud.</p>
 
-  <div class="post-list">
+  <ul class="entries">
     {%- for post in blogposts -%}
-    <article class="post-list-item">
-      <time class="pli-date">{{ post.date | date: "%Y-%m-%d" }}</time>
-      <div class="pli-body">
-        <h2 class="pli-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-        <p class="pli-excerpt">{{ post.description | default: post.excerpt | strip_html | truncate: 180 }}</p>
-        {%- if post.tags and post.tags != empty -%}
-        <div class="pli-tags">{%- for tag in post.tags -%}<span class="tag">#{{ tag }}</span>{%- endfor -%}</div>
-        {%- endif -%}
-      </div>
-    </article>
+    <li class="entry">
+      <span class="entry-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+      <a class="entry-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    </li>
     {%- endfor -%}
     {%- if blogposts.size == 0 -%}
-    <p class="empty">No posts yet. Add one at <code>_posts/YYYY-MM-DD-name.md</code> with <code>category: blog</code>.</p>
+    <li class="empty">No posts yet. Add one at <code>_posts/YYYY-MM-DD-name.md</code> with <code>category: blog</code>.</li>
     {%- endif -%}
-  </div>
+  </ul>
 </div>
