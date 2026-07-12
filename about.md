@@ -16,5 +16,5 @@ stuck at 2am. Figured I'd return the favour.
 Everything here is on machines I'm allowed to attack — HTB, CTFs, and my own lab.
 Don't point any of it at things you don't own.
 
-You can find me on [GitHub]({% if site.github_user %}https://github.com/{{ site.github_user }}{% endif %})
+You can find me on [Hack The Box]({{ site.htb_url }})
 or reach me at [{{ site.email }}](mailto:{{ site.email }}).

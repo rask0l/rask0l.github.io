@@ -15,7 +15,7 @@ baseurl:          ""
 
 # ── Social / links (shown in footer + head) ──────────────────
 github_user:      "rask0l"
-htb_user:         "your-htb-handle"       # optional, remove if unused
+htb_url:          "https://app.hackthebox.com/users/3296877"
 twitter_user:     ""                       # optional
 
 # ─────────────────────────────────────────────────────────────
