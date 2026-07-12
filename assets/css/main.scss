@@ -90,6 +90,7 @@ hr { border: none; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   align-items: start;
 }
 .post-layout .post { padding: 0; }
+.post-layout.no-toc { grid-template-columns: minmax(0, 680px); justify-content: center; gap: 0; }
 
 .toc { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; }
 .toc-title { font-size: .7rem; text-transform: uppercase; letter-spacing: .13em; color: var(--faint); margin-bottom: .7rem; }

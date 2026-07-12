@@ -22,7 +22,12 @@
   if (!md || !toc) return;
 
   var heads = md.querySelectorAll("h2, h3");
-  if (heads.length < 2) { toc.style.display = "none"; return; }
+  if (heads.length < 2) {
+    var layout = document.querySelector(".post-layout");
+    if (layout) layout.classList.add("no-toc");
+    toc.style.display = "none";
+    return;
+  }
 
   var ul = document.createElement("ul");
   var links = [];
