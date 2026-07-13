@@ -14,10 +14,13 @@
 
 /* append your custom style below */
 
-.content a {
+.content a:not(.img-link),
+#topbar #breadcrumb a {
   color: #ff4d4d;
+  border-bottom: 1px solid #ff4d4d;
 
   &:hover {
-    color: #3b82f6;
+    color: #3b82f6 !important;
+    border-bottom-color: #3b82f6 !important;
   }
 }
