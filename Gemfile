@@ -1,19 +1,14 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
-# Uses the exact gem set GitHub Pages runs, so what you see locally
-# matches what deploys. No CI/build step needed — just push.
-gem "github-pages", group: :jekyll_plugins
+gem "jekyll-theme-chirpy", "~> 7.6"
 
-# Plugins (also declared in _config.yml)
-group :jekyll_plugins do
-  gem "jekyll-feed"
-  gem "jekyll-seo-tag"
-  gem "jekyll-sitemap"
+gem "html-proofer", "~> 5.0", group: :test
+
+platforms :windows, :jruby do
+  gem "tzinfo", ">= 1", "< 3"
+  gem "tzinfo-data"
 end
 
-# Windows / JRuby helpers (harmless elsewhere)
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem "wdm", "~> 0.1.1", platforms: [:mingw, :mswin, :x64_mingw]
-
-# Faster local rebuilds
-gem "webrick", "~> 1.8"
+gem "wdm", "~> 0.2.0", :platforms => [:windows]

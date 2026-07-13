@@ -1,69 +1,179 @@
-# ─────────────────────────────────────────────────────────────
-#  Site settings
-# ─────────────────────────────────────────────────────────────
-title:            "rask0l // security notes"
-tagline:          "HTB writeups, security research & build logs"
-description:      "Hack The Box writeups, CTF notes, security research, and progress logs by rask0l."
-author:           "Sereyrith (rask0l)"
-email:            "sereykunvuth@gmail.com"
+# The Site Configuration
 
-# ── URL config ───────────────────────────────────────────────
-# If your repo is named  <username>.github.io   →  baseurl: ""
-# If your repo is named  blog (a project site)  →  baseurl: "/blog"
-url:              "https://rask0l.github.io"
-baseurl:          ""
+theme: jekyll-theme-chirpy
 
-# ── Social / links (shown in footer + head) ──────────────────
-github_user:      "rask0l"
-htb_url:          "https://app.hackthebox.com/users/3296877"
-twitter_user:     ""                       # optional
+lang: en
+timezone: Asia/Phnom_Penh
 
-# ─────────────────────────────────────────────────────────────
-#  Build settings
-# ─────────────────────────────────────────────────────────────
-markdown:         kramdown
-highlighter:      rouge
-permalink:        /:categories/:title/
+# ↓ jekyll-seo-tag settings --------------------------
+
+title: rask0l
+
+tagline: HTB writeups and security notes
+
+description: >-
+  Hack The Box writeups, CTF notes, and security research by rask0l.
+
+url: "https://rask0l.github.io"
+
+github:
+  username: rask0l
+
+twitter:
+  username:
+
+social:
+  name: Sereyrith
+  email: sereykunvuth@gmail.com
+  fediverse_handle:
+  links:
+    - https://app.hackthebox.com/users/3296877
+    - https://github.com/rask0l
+
+webmaster_verifications:
+  google:
+  bing:
+  alexa:
+  yandex:
+  baidu:
+  facebook:
+
+# ↑ --------------------------
+
+analytics:
+  google:
+    id:
+  goatcounter:
+    id:
+  umami:
+    id:
+    domain:
+  matomo:
+    id:
+    domain:
+  cloudflare:
+    id:
+  fathom:
+    id:
+
+pageviews:
+  provider:
+
+theme_mode:
+
+cdn:
+
+avatar:
+
+social_preview_image:
+
+toc: true
+
+actions:
+  edit_post:
+    enabled: false
+    url: ""
+    static_url: false
+
+comments:
+  provider:
+  disqus:
+    shortname:
+  utterances:
+    repo:
+    issue_term:
+  giscus:
+    repo:
+    repo_id:
+    category:
+    category_id:
+    mapping:
+    strict:
+    input_position:
+    lang:
+    reactions_enabled:
+
+assets:
+  self_host:
+    enabled:
+    env:
+
+pwa:
+  enabled: true
+  cache:
+    enabled: true
+    deny_paths:
+
+paginate: 10
+
+baseurl: ""
+
+# ------------ The following options are not recommended to be modified ------------------
 
 kramdown:
-  input:          GFM
+  footnote_backlink: "&#8617;&#xfe0e;"
   syntax_highlighter: rouge
   syntax_highlighter_opts:
-    css_class:    'highlight'
+    css_class: highlight
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
 
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
+collections:
+  tabs:
+    output: true
+    sort_by: order
 
-# Reading time / excerpt config
-excerpt_separator: "<!--more-->"
-
-# ── Collections-ish via categories ───────────────────────────
-# Writeups live in _posts with `category: writeups`
-# Blog posts live in _posts with `category: blog`
-
-# ── Default front matter ─────────────────────────────────────
 defaults:
   - scope:
       path: ""
       type: posts
     values:
       layout: post
+      comments: false
+      toc: true
+      permalink: /posts/:title/
+  - scope:
+      path: _drafts
+    values:
+      comments: false
   - scope:
       path: ""
+      type: tabs
     values:
-      layout: default
-
-# ── Exclude from build ───────────────────────────────────────
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - README.md
-  - vendor
-  - .sass-cache
-  - .jekyll-cache
-  - node_modules
+      layout: page
+      permalink: /:title/
 
 sass:
   style: compressed
+
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  profile: false
+  blanklines: false
+  ignore:
+    envs: [development]
+
+exclude:
+  - "*.gem"
+  - "*.gemspec"
+  - docs
+  - tools
+  - README.md
+  - LICENSE
+  - purgecss.js
+  - "*.config.js"
+  - "package*.json"
+
+jekyll-archives:
+  enabled: [categories, tags]
+  layouts:
+    category: category
+    tag: tag
+  permalinks:
+    tag: /tags/:name/
+    category: /categories/:name/

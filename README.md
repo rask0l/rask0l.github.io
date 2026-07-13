@@ -1,86 +1,37 @@
-# rask0l // security notes
+# rask0l
 
-A terminal-themed Jekyll site for Hack The Box writeups, CTF notes, and a blog.
-Hosted free on **GitHub Pages** — push markdown, it deploys automatically.
+Hack The Box writeups, CTF notes, and a blog. Built with
+[Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy), hosted on GitHub Pages.
 
----
+## Adding a writeup or post
 
-## 🚀 Deploy in 5 minutes
-
-1. **Create the repo.** For a site at `https://<username>.github.io`, name the repo
-   exactly `<username>.github.io`. (For a sub-path like `.../blog`, name it anything
-   and set `baseurl: "/blog"` in `_config.yml`.)
-
-2. **Set your details** in [`_config.yml`](_config.yml) — replace `your-username`,
-   `your-htb-handle`, title, etc. Then run this from the repo root to swap the
-   placeholder everywhere:
-   ```bash
-   grep -rl 'your-username' . --exclude-dir=_site | xargs sed -i 's/your-username/YOUR_GITHUB_USERNAME/g'
-   ```
-
-3. **Push:**
-   ```bash
-   git init && git add . && git commit -m "init: security notes site"
-   git branch -M main
-   git remote add origin https://github.com/<username>/<repo>.git
-   git push -u origin main
-   ```
-
-4. **Enable Pages:** Repo → **Settings → Pages → Source: Deploy from a branch →
-   `main` / `root`**. Wait ~1 minute. Done.
-
----
-
-## ✍️ Adding a writeup
-
-Drop a file in [`_posts/`](_posts/) named `YYYY-MM-DD-machine-name.md`:
+Drop a file in `_posts/` named `YYYY-MM-DD-title.md`:
 
 ```markdown
 ---
-layout: post
-title: "BoardLight"
-category: writeups
-date: 2026-07-12 20:00:00 +0000
-difficulty: Easy        # Easy | Medium | Hard | Insane
-os: Linux               # Linux | Windows
-platform: HackTheBox
-points: 20
-status: Owned           # Owned | In progress
-tags: [web, cve, privesc]
-description: "One-line summary shown on the card."
+title: "Machine Name"
+categories: [Writeups]     # or [Blog]
+date: 2026-07-13 20:00:00 +0000
+tags: [nmap, web, privesc] # lowercase, used for the /tags/ index
 ---
 
 ## Enumeration
-...your markdown...
+...
 ```
 
-The card badges, difficulty colors, filters, and stats update automatically.
+Push to `main` — GitHub Actions builds and deploys automatically
+(see `.github/workflows/pages-deploy.yml`).
 
-## ✍️ Adding a blog post
-
-Same folder, but `category: blog` and no difficulty/os fields needed.
-
----
-
-## 🖥️ Preview locally (optional)
+## Local preview
 
 ```bash
-bundle install          # first time only
+bundle install
 bundle exec jekyll serve --livereload
 # → http://127.0.0.1:4000
 ```
 
-You don't need this to publish — GitHub builds it for you. It's just for previewing.
+## Config
 
----
-
-## 🎨 Customizing
-
-| What | Where |
-|------|-------|
-| Colors / theme | CSS variables at the top of [`assets/css/main.scss`](assets/css/main.scss) |
-| Nav links | [`_includes/nav.html`](_includes/nav.html) |
-| Hero text | [`index.html`](index.html) + the typing effect in [`assets/js/main.js`](assets/js/main.js) |
-| About / progress | [`about.md`](about.md), [`progress.md`](progress.md) |
-
-Signature color is HTB green `#9fef00` — change `--green` to rebrand instantly.
+Site title, tagline, and social links live in `_config.yml`. Sidebar contact
+icons (currently: Hack The Box profile + email) are in `_data/contact.yml`.
+The About page is `_tabs/about.md`.

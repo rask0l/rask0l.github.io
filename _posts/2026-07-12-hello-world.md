@@ -1,7 +1,6 @@
 ---
-layout: post
 title: "First post"
-category: blog
+categories: [Blog]
 date: 2026-07-12 10:00:00 +0000
 tags: [meta]
 description: "Why this site exists."

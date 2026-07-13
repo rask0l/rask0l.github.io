@@ -1,0 +1,9 @@
+#  The contact options.
+
+- type: hackthebox
+  icon: "fas fa-flag-checkered"
+  url: "https://app.hackthebox.com/users/3296877"
+
+- type: email
+  icon: "fas fa-envelope"
+  noblank: true # open link in current tab
