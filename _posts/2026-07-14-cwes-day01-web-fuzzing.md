@@ -1,8 +1,8 @@
 ---
-title: "CWES Day 02 — Web Fuzzing"
+title: "CWES Day 01 — Web Fuzzing"
 categories: [CWES]
 date: 2026-07-14 20:00:00 +0700
-tags: [cwes, day02, fuzzing, ffuf, recon]
+tags: [cwes, day01, fuzzing, ffuf, recon]
 ---
 
 ## Today

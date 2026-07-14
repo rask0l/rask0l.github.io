@@ -7,13 +7,13 @@ Living reference sheet for the CWES exam, built up over the 60-day prep
 [log](/categories/cwes/). Sections fill in as topics get covered — the goal
 is for this page to be exam-day-ready by day 60.
 
-> Last updated: Day 2 — Web Fuzzing.
+> Last updated: Day 1 — Web Fuzzing.
 {: .prompt-info }
 
 ## Recon & Enumeration
 
 Full walkthrough + the skills-assessment chain:
-[Day 02 — Web Fuzzing](/posts/cwes-day02-web-fuzzing/).
+[Day 01 — Web Fuzzing](/posts/cwes-day01-web-fuzzing/).
 
 **Fingerprint first** (a 403 still confirms the host is alive):
 
