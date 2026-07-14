@@ -183,10 +183,55 @@ The skills assessment is a breadcrumb trail — each step reveals the next:
 *content* when error-page sizes vary; and re-apply `/etc/hosts` + IP
 whenever the instance rotates.
 
+### Alternate approach: feroxbuster-first
+
+Found a [writeup of the same assessment](https://medium.com/@Aircon/hackthebox-htb-web-fuzzing-skill-assessment-2989ddc4df6e)
+that swaps `feroxbuster` in for the directory-discovery steps instead of raw
+`ffuf`. Same chain, worth keeping around as a second toolchain:
+
+```bash
+# 1. connectivity check
+curl -v http://<target>:<port>/
+
+# 2. recursive dir scan — feroxbuster instead of ffuf
+feroxbuster -u http://<target>:<port>/ \
+  -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt \
+  -r -x php,html,txt,js -t 50 -k
+
+# 3. param value fuzz — same idea as mine, ffuf
+ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt:FUZZ \
+  -u http://<target>:<port>/admin/panel.php?accessID=FUZZ -fs 58
+
+# 4. add the discovered vhost to /etc/hosts
+sudo nano /etc/hosts
+
+# 5. vhost fuzz — ffuf, size *range* instead of an exact byte count
+ffuf -c -w /usr/share/seclists/SecLists-master/Discovery/DNS/subdomains-top1million-20000.txt:FUZZ \
+  -u http://fuzzing_fun.htb:<port>/ -H 'Host: FUZZ.fuzzing_fun.htb' -fs 250-350
+
+# 6. recursive dir scan on the hidden vhost's /godeep — feroxbuster again
+feroxbuster -u http://hidden.fuzzing_fun.htb:<port>/godeep/ \
+  -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -r -t 50 -k
+```
+
+Two things worth stealing from this version:
+- **feroxbuster over raw ffuf for directory discovery** — `-r` recurses
+  automatically, so there's no manual "now fuzz inside the dir I just found"
+  follow-up pass.
+- **`-fs 250-350` as a range**, not one exact byte count, on the vhost fuzz —
+  more forgiving when sizes wobble slightly instead of varying wildly (see
+  the Apache-403 trap above, where a range wouldn't have been enough).
+
+Their `/usr/share/wordlists/dirbuster/...` and
+`/usr/share/seclists/SecLists-master/...` paths are yet another variant of
+the seclists-path gotcha from the table above — every writeup assumes a
+different install layout, which is exactly why "find it once, symlink it"
+beats trusting any writeup's literal path.
+
 ## Cheatsheet additions
 
-Folded the condensed version of this — filter flags, the ffuf skeleton, and
-the vhost-fuzzing trap — into the
+Folded the condensed version of this — filter flags, the ffuf skeleton, the
+vhost-fuzzing trap, and the feroxbuster-first alternative — into the
 [Recon & Enumeration](/cwes-cheatsheet/#recon--enumeration) section of the
 running cheatsheet, with a link back here for the full walkthrough.
 

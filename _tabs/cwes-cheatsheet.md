@@ -31,6 +31,10 @@ gobuster dir -u http://TARGET:PORT -w WORDLIST -x php,html,txt
 feroxbuster -u http://TARGET:PORT/dir/ -w WORDLIST -r -x php,html,txt -t 50 -k
 ```
 
+> `feroxbuster -r` recurses into found directories automatically — no manual
+> "now fuzz inside the dir I just found" follow-up pass like with ffuf.
+{: .prompt-tip }
+
 **Parameter value fuzzing** (when a page complains about a bad param value —
 fuzz the *value*, not the name):
 
@@ -52,6 +56,7 @@ ffuf -w PARAM_WORDLIST:FUZZ -u "http://T:P/page.php?FUZZ=test" -fs BASELINE
 echo "TARGET_IP hostname.htb" | sudo tee -a /etc/hosts   # NO port in /etc/hosts
 curl -s "http://hostname.htb:P/" -H "Host: doesnotexist.hostname.htb" -w "\n%{size_download}\n"
 ffuf -c -w DNS_WORDLIST:FUZZ -u http://hostname.htb:P/ -H "Host: FUZZ.hostname.htb" -fs BASELINE
+# -fs also takes a range (e.g. -fs 250-350) — more forgiving than one exact byte count
 gobuster vhost -u http://hostname.htb:P -w WORDLIST --append-domain   # needs a real domain, not a bare IP
 ```
 
