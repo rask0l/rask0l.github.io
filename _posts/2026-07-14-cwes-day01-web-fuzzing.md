@@ -52,6 +52,25 @@ nmap -p- -Pn -n --min-rate 5000 -T4 TARGET
 > target for a clean IP:port.
 {: .prompt-tip }
 
+Example session, a fast top-1000 sweep before the full one:
+
+{% capture kt_recon %}
+$ nmap -T5 --open $TARGET_IP
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-05-10 18:45 +0500
+Nmap scan report for $TARGET_IP
+Host is up (0.22s latency).
+Not shown: 986 closed tcp ports (reset), 12 filtered tcp ports (no-response)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 6.84 seconds
+{% endcapture %}
+{% include terminal.html content=kt_recon %}
+
+Two ports are open: **SSH (22)** and **HTTP (80)**. Simple attack surface,
+so it's time to dig deeper into the web server.
+
 ### 2. Directory / file fuzzing
 
 ```bash
