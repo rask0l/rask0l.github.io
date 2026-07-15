@@ -251,8 +251,8 @@ beats trusting any writeup's literal path.
 
 Folded the condensed version of this (filter flags, the ffuf skeleton, the
 vhost-fuzzing trap, and the feroxbuster-first alternative) into the
-[Recon & Enumeration](/cwes-cheatsheet/#recon--enumeration) section of the
-running cheatsheet, with a link back here for the full walkthrough.
+[Web Fuzzing Cheatsheet](/posts/cheatsheet-web-fuzzing/), with a link back
+here for the full walkthrough.
 
 ## Notes for tomorrow
 
