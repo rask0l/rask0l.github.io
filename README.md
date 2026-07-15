@@ -44,6 +44,28 @@ tags: [cwes, day07, sqli]
 - The running exam cheatsheet is `_tabs/cwes-cheatsheet.md`. Update it as
   topics are learned, since it's meant to be exam-day-ready by day 60.
 
+### Terminal-window blocks
+
+For a real command/output transcript, `_includes/terminal.html` renders it
+as a Kali-style terminal window instead of a plain code block. Prefix a
+command line with `$ `, everything else is treated as output:
+
+```liquid
+{% capture term %}
+$ nmap -T5 --open $TARGET_IP
+Host is up (0.22s latency).
+22/tcp open  ssh
+80/tcp open  http
+{% endcapture %}
+{% include terminal.html content=term %}
+```
+
+Optional params: `host` (default `kali@kali`), `path` (default `~`), and
+`title` (defaults to `{host}: {path}`). The breadcrumb prompt is generated
+automatically, not hand-typed. Use this only for genuine session transcripts;
+generic command-syntax references (the kind with `WORDLIST`/`TARGET`
+placeholders) stay as plain ` ```bash ` blocks.
+
 ## Local preview
 
 ```bash

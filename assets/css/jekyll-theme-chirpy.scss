@@ -29,3 +29,101 @@
   color: #3b82f6 !important;
   border-bottom-color: #3b82f6 !important;
 }
+
+/* Kali-style terminal window, used via {% include terminal.html %} */
+
+.kali-terminal {
+  margin: 1.5rem 0;
+  border-radius: 9px;
+  overflow: hidden;
+  background: #0d0e14;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.86rem;
+}
+
+.kali-terminal__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 2.35rem;
+  padding: 0 0.9rem;
+  background: #1b1c26;
+}
+
+.kali-terminal__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+
+.kali-terminal__dot--red {
+  background: #ff5f56;
+}
+
+.kali-terminal__dot--yellow {
+  background: #ffbd2e;
+}
+
+.kali-terminal__dot--green {
+  background: #27c93f;
+}
+
+.kali-terminal__title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #9298a8;
+  font-size: 0.78rem;
+}
+
+.kali-terminal__body {
+  margin: 0;
+  padding: 1rem 1.15rem 1.2rem;
+  color: #d3d4dc;
+  overflow-x: auto;
+  line-height: 1.55;
+  white-space: pre;
+}
+
+.kali-terminal__body code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+}
+
+.kali-terminal__line,
+.kali-terminal__output {
+  display: block;
+}
+
+.kali-terminal__box {
+  color: #6b7280;
+}
+
+.kali-terminal__user {
+  color: #58a6ff;
+}
+
+.kali-terminal__glyph {
+  color: #ff7a6b;
+}
+
+.kali-terminal__path {
+  color: #eef0f7;
+}
+
+.kali-terminal__dollar {
+  color: #3fb950;
+  font-weight: 700;
+}
+
+.kali-terminal__cmd {
+  color: #f2f3f8;
+}
+
+.kali-terminal__output {
+  color: #b6b8c3;
+}

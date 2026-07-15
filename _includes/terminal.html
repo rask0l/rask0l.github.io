@@ -1,0 +1,63 @@
+{%- comment -%}
+  Renders a Kali-style terminal window. Prefix a line with "$ " to render it
+  as a command; the breadcrumb prompt above it is generated automatically.
+  Any other line renders as plain output.
+
+  Usage:
+    {% capture term %}
+    $ nmap -T5 --open $TARGET_IP
+    Host is up (0.22s latency).
+    22/tcp open  ssh
+    80/tcp open  http
+    {% endcapture %}
+    {% include terminal.html content=term %}
+
+  Params: host (default "kali@kali"), path (default "~"), title
+  (default "{host}: {path}"), content (required, the transcript above).
+{%- endcomment -%}
+{%- assign kt_host = include.host | default: 'kali@kali' -%}
+{%- assign kt_path = include.path | default: '~' -%}
+{%- assign kt_title = include.title -%}
+{%- unless kt_title -%}
+  {%- assign kt_title = kt_host | append: ': ' | append: kt_path -%}
+{%- endunless -%}
+{%- assign kt_host_parts = kt_host | split: '@' -%}
+{%- assign kt_user_html = '<span class="kali-terminal__user">' | append: kt_host_parts[0] | append: '</span>' -%}
+{%- if kt_host_parts[1] -%}
+  {%- assign kt_user_html = kt_user_html | append: '<span class="kali-terminal__glyph">㉿</span><span class="kali-terminal__user">' -%}
+  {%- assign kt_user_html = kt_user_html | append: kt_host_parts[1] | append: '</span>' -%}
+{%- endif -%}
+{%- assign kt_prompt_html = '<span class="kali-terminal__line"><span class="kali-terminal__box">┌──(</span>' | append: kt_user_html -%}
+{%- assign kt_prompt_html = kt_prompt_html | append: '<span class="kali-terminal__box">)-[</span><span class="kali-terminal__path">' -%}
+{%- assign kt_prompt_html = kt_prompt_html | append: kt_path | append: '</span><span class="kali-terminal__box">]</span></span>' -%}
+{%- assign kt_prompt_html = kt_prompt_html | append: '<span class="kali-terminal__line"><span class="kali-terminal__box">└─</span><span class="kali-terminal__dollar">$</span> ' -%}
+{% capture kt_nl %}
+{% endcapture %}
+{%- assign kt_content = include.content | strip -%}
+{%- assign kt_lines = kt_content | split: kt_nl -%}
+{%- assign kt_body = '' -%}
+{%- for kt_raw in kt_lines -%}
+  {%- assign kt_line = kt_raw | strip -%}
+  {%- assign kt_prefix = kt_line | slice: 0, 2 -%}
+  {%- if kt_prefix == '$ ' -%}
+    {%- assign kt_cmd = kt_line | slice: 2, 9999 | escape -%}
+    {%- assign kt_body = kt_body | append: kt_prompt_html -%}
+    {%- assign kt_body = kt_body | append: '<span class="kali-terminal__cmd">' -%}
+    {%- assign kt_body = kt_body | append: kt_cmd -%}
+    {%- assign kt_body = kt_body | append: '</span></span>' -%}
+  {%- else -%}
+    {%- assign kt_line_esc = kt_line | escape -%}
+    {%- assign kt_body = kt_body | append: '<span class="kali-terminal__output">' -%}
+    {%- assign kt_body = kt_body | append: kt_line_esc -%}
+    {%- assign kt_body = kt_body | append: '</span>' -%}
+  {%- endif -%}
+{%- endfor -%}
+<div class="kali-terminal">
+  <div class="kali-terminal__bar">
+    <span class="kali-terminal__dot kali-terminal__dot--red"></span>
+    <span class="kali-terminal__dot kali-terminal__dot--yellow"></span>
+    <span class="kali-terminal__dot kali-terminal__dot--green"></span>
+    <span class="kali-terminal__title">{{ kt_title }}</span>
+  </div>
+  <pre class="kali-terminal__body"><code>{{ kt_body }}</code></pre>
+</div>
