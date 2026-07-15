@@ -24,10 +24,8 @@ Push to `main`. GitHub Actions builds and deploys automatically
 
 ## CWES cheatsheets
 
-CWES exam prep is organized as one cheatsheet per module, not a daily log
-(that was the original plan, `_posts/2026-07-14-cwes-day01-web-fuzzing.md`
-is the one artifact of it and stays as-is, but it's not the pattern to
-follow going forward). Each module gets its own post:
+CWES exam prep is organized as one cheatsheet per module. Each module gets
+its own post:
 
 ```markdown
 ---
