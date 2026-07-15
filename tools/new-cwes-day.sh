@@ -73,7 +73,7 @@ if [[ -e "$out_file" ]]; then
 fi
 
 sed \
-  -e "s/Day NN — Topic/Day ${padded} — ${title}/" \
+  -e "s/Day NN: Topic/Day ${padded}: ${title}/" \
   -e "s/dayNN/day${padded}/" \
   -e "s/2026-01-01 20:00:00 +0700/${date_str} ${time_str}/" \
   "$TEMPLATE" >"$out_file"

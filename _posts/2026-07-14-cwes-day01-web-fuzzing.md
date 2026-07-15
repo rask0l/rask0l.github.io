@@ -1,5 +1,5 @@
 ---
-title: "CWES Day 01 — Web Fuzzing"
+title: "CWES Day 01: Web Fuzzing"
 categories: [CWES]
 date: 2026-07-14 20:00:00 +0700
 tags: [cwes, day01, fuzzing, ffuf, recon]
@@ -9,7 +9,7 @@ tags: [cwes, day01, fuzzing, ffuf, recon]
 
 HTB Academy's Web Fuzzing module, finished end to end including the skills
 assessment. Core idea: **discover** endpoints, params, vhosts, and hidden
-dirs by fuzzing the space of possibilities — not by guessing one value at a
+dirs by fuzzing the space of possibilities, not by guessing one value at a
 time.
 
 ## Environment gotchas (things that wasted time)
@@ -20,19 +20,19 @@ time.
 | Make writeup paths "just work" | Symlink once: `sudo ln -s ~/SecLists /usr/share/seclists` |
 | `directory-list-2.3-medium.txt` "no such file" | Your clone may prefix it: `DirBuster-2007_directory-list-2.3-medium.txt`. Always `ls` the dir first |
 | DNS lists live under `Discovery/DNS/`, not `Discovery/` | Full path: `~/SecLists/Discovery/DNS/subdomains-top1million-*.txt` |
-| `/etc/hosts` entry not resolving | **Never put a port in `/etc/hosts`** — format is strictly `IP hostname`. Port goes in the URL |
+| `/etc/hosts` entry not resolving | **Never put a port in `/etc/hosts`.** Format is strictly `IP hostname`. Port goes in the URL |
 | `pip install` → "externally-managed-environment" (PEP 668) | Use a venv (`python3 -m venv venv && source venv/bin/activate`) or `--break-system-packages` for throwaway tools |
 | curl `(35) wrong version number` | You used `https://` on a plain-HTTP port. Switch to `http://` |
 | curl `(3) bad range in URL` with `[` `]` | Brackets are curl range syntax. Use `--globoff` or URL-encode (`%5B` `%5D`) |
 | ffuf: "Keyword FUZZ defined, but not found..." | You forgot to put `FUZZ` in the URL/data/header |
-| Terminal errors after pasting HTML output | Copy-paste artifact — bash tried to run part of the HTML. Harmless |
+| Terminal errors after pasting HTML output | Copy-paste artifact: bash tried to run part of the HTML. Harmless |
 
 ## Concepts learned
 
 ### 1. Initial recon
 
 ```bash
-# Confirm reachability + fingerprint server (403 is still progress — confirms it's alive)
+# Confirm reachability + fingerprint server (403 is still progress, confirms it's alive)
 curl -s -i http://TARGET:PORT/
 
 # Response headers only
@@ -71,10 +71,10 @@ gobuster dir -u http://TARGET:PORT -w WORDLIST -x php,html,txt
 feroxbuster -u http://TARGET:PORT/dir/ -w WORDLIST -r -x php,html,txt -t 50 -k
 ```
 
-**Filtering out noise** (critical — a catch-all page returns 200 for everything):
+**Filtering out noise** (critical, since a catch-all page returns 200 for everything):
 - `-ic` ignore wordlist comment lines (the `#` license header noise)
 - `-fs N` filter by response size (`-fs 58` or ranges `-fs 250-350`)
-- `-fc N` filter by status code (`-fc 403` — more robust than size when error pages vary)
+- `-fc N` filter by status code (`-fc 403`, more robust than size when error pages vary)
 - `-fr "regex"` filter by body content (`-fr "Forbidden|Access Denied"`)
 - `-fw N` / `-fl N` filter by word / line count
 - `-ac` autocalibrate filters automatically
@@ -83,7 +83,7 @@ feroxbuster -u http://TARGET:PORT/dir/ -w WORDLIST -r -x php,html,txt -t 50 -k
 ### 3. Parameter value fuzzing
 
 When a page says something like *"Invalid parameter, ensure X is set
-correctly"*, the **value** of that param is the target — fuzz it.
+correctly"*, the **value** of that param is the target. Fuzz it.
 
 ```bash
 # 1. Find the baseline "wrong" response size first
@@ -142,7 +142,7 @@ ffuf -c -w DNS_WORDLIST:FUZZ -u http://hostname.htb:PORT/ \
 gobuster equivalent:
 ```bash
 gobuster vhost -u http://hostname.htb:PORT -w WORDLIST --append-domain
-# NOTE: vhost fuzzing needs a real base DOMAIN, not a bare IP — bare IPs return uniform 400 garbage.
+# NOTE: vhost fuzzing needs a real base DOMAIN, not a bare IP. Bare IPs return uniform 400 garbage.
 ```
 
 ### 5. API endpoint fuzzing
@@ -161,13 +161,13 @@ curl -s http://TARGET:PORT/endpoint | jq
 
 ## Machines / challenges pwned
 
-- **Web Fuzzing skills assessment** (HTB Academy) — chained recon → param
+- **Web Fuzzing skills assessment** (HTB Academy): chained recon → param
   fuzzing → vhost fuzzing → recursive dir fuzzing to reach the flag.
   Full chain below.
 
 ### The chained-hint pattern
 
-The skills assessment is a breadcrumb trail — each step reveals the next:
+The skills assessment is a breadcrumb trail. Each step reveals the next:
 
 1. **Recon** → root is 403, but `/admin` (301) and `/admin/panel.php` exist.
 2. **panel.php** → "Invalid parameter … accessID". Fuzz the *value*:
@@ -193,45 +193,45 @@ that swaps `feroxbuster` in for the directory-discovery steps instead of raw
 # 1. connectivity check
 curl -v http://<target>:<port>/
 
-# 2. recursive dir scan — feroxbuster instead of ffuf
+# 2. recursive dir scan, feroxbuster instead of ffuf
 feroxbuster -u http://<target>:<port>/ \
   -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt \
   -r -x php,html,txt,js -t 50 -k
 
-# 3. param value fuzz — same idea as mine, ffuf
+# 3. param value fuzz, same idea as mine, ffuf
 ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt:FUZZ \
   -u http://<target>:<port>/admin/panel.php?accessID=FUZZ -fs 58
 
 # 4. add the discovered vhost to /etc/hosts
 sudo nano /etc/hosts
 
-# 5. vhost fuzz — ffuf, size *range* instead of an exact byte count
+# 5. vhost fuzz, ffuf, size *range* instead of an exact byte count
 ffuf -c -w /usr/share/seclists/SecLists-master/Discovery/DNS/subdomains-top1million-20000.txt:FUZZ \
   -u http://fuzzing_fun.htb:<port>/ -H 'Host: FUZZ.fuzzing_fun.htb' -fs 250-350
 
-# 6. recursive dir scan on the hidden vhost's /godeep — feroxbuster again
+# 6. recursive dir scan on the hidden vhost's /godeep, feroxbuster again
 feroxbuster -u http://hidden.fuzzing_fun.htb:<port>/godeep/ \
   -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -r -t 50 -k
 ```
 
 Two things worth stealing from this version:
-- **feroxbuster over raw ffuf for directory discovery** — `-r` recurses
+- **feroxbuster over raw ffuf for directory discovery**: `-r` recurses
   automatically, so there's no manual "now fuzz inside the dir I just found"
   follow-up pass.
-- **`-fs 250-350` as a range**, not one exact byte count, on the vhost fuzz —
-  more forgiving when sizes wobble slightly instead of varying wildly (see
+- **`-fs 250-350` as a range**, not one exact byte count, on the vhost fuzz.
+  More forgiving when sizes wobble slightly instead of varying wildly (see
   the Apache-403 trap above, where a range wouldn't have been enough).
 
 Their `/usr/share/wordlists/dirbuster/...` and
 `/usr/share/seclists/SecLists-master/...` paths are yet another variant of
-the seclists-path gotcha from the table above — every writeup assumes a
+the seclists-path gotcha from the table above. Every writeup assumes a
 different install layout, which is exactly why "find it once, symlink it"
 beats trusting any writeup's literal path.
 
 ## Cheatsheet additions
 
-Folded the condensed version of this — filter flags, the ffuf skeleton, the
-vhost-fuzzing trap, and the feroxbuster-first alternative — into the
+Folded the condensed version of this (filter flags, the ffuf skeleton, the
+vhost-fuzzing trap, and the feroxbuster-first alternative) into the
 [Recon & Enumeration](/cwes-cheatsheet/#recon--enumeration) section of the
 running cheatsheet, with a link back here for the full walkthrough.
 

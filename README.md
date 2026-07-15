@@ -19,7 +19,7 @@ tags: [nmap, web, privesc] # lowercase, used for the /tags/ index
 ...
 ```
 
-Push to `main` — GitHub Actions builds and deploys automatically
+Push to `main`. GitHub Actions builds and deploys automatically
 (see `.github/workflows/pages-deploy.yml`).
 
 ## CWES 60-day log
@@ -29,7 +29,7 @@ per day:
 
 ```markdown
 ---
-title: "CWES Day 07 — SQL Injection"
+title: "CWES Day 07: SQL Injection"
 categories: [CWES]
 date: 2026-07-19 20:00:00 +0700
 tags: [cwes, day07, sqli]
@@ -41,8 +41,8 @@ tags: [cwes, day07, sqli]
   number), e.g. `bash tools/new-cwes-day.sh sql-injection 'SQL Injection'`.
 - Boxes/challenges pwned along the way get their own normal `[Writeups]` post
   and get linked back from the day's CWES entry (and vice versa).
-- The running exam cheatsheet is `_tabs/cwes-cheatsheet.md` — update it as
-  topics are learned, it's meant to be exam-day-ready by day 60.
+- The running exam cheatsheet is `_tabs/cwes-cheatsheet.md`. Update it as
+  topics are learned, since it's meant to be exam-day-ready by day 60.
 
 ## Local preview
 
