@@ -22,27 +22,29 @@ tags: [nmap, web, privesc] # lowercase, used for the /tags/ index
 Push to `main`. GitHub Actions builds and deploys automatically
 (see `.github/workflows/pages-deploy.yml`).
 
-## CWES 60-day log
+## CWES cheatsheets
 
-Daily/module notes from the 60-day CWES prep live in `_posts/` too, one file
-per day:
+CWES exam prep is organized as one cheatsheet per module, not a daily log
+(that was the original plan, `_posts/2026-07-14-cwes-day01-web-fuzzing.md`
+is the one artifact of it and stays as-is, but it's not the pattern to
+follow going forward). Each module gets its own post:
 
 ```markdown
 ---
-title: "CWES Day 07: SQL Injection"
-categories: [CWES]
+title: "SQL Injection Cheatsheet"
+categories: [Cheatsheets]
 date: 2026-07-19 20:00:00 +0700
-tags: [cwes, day07, sqli]
+tags: [cheatsheet, sqli, cwes]
 ---
 ```
 
-- Run `bash tools/new-cwes-day.sh <slug> [title]` to scaffold the next day's
-  post from `_drafts/cwes-day-template.md` (auto-fills the date and next day
-  number), e.g. `bash tools/new-cwes-day.sh sql-injection 'SQL Injection'`.
-- Boxes/challenges pwned along the way get their own normal `[Writeups]` post
-  and get linked back from the day's CWES entry (and vice versa).
-- The running exam cheatsheet is `_tabs/cwes-cheatsheet.md`. Update it as
-  topics are learned, since it's meant to be exam-day-ready by day 60.
+- Condense the module's PDF/notes down to what's actually useful for quick
+  reference and exam recall (commands, tables, gotchas), don't transcribe
+  it wholesale.
+- Boxes/challenges pwned along the way get their own normal `[Writeups]`
+  post, cross-linked from the relevant cheatsheet.
+- `_tabs/cwes-cheatsheet.md` is a short index tab linking every module
+  cheatsheet, add an entry there ("Modules covered") when a new one goes up.
 
 ### Terminal-window blocks
 

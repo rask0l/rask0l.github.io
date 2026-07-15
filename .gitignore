@@ -8,3 +8,6 @@ Gemfile.lock
 node_modules/
 .DS_Store
 *.log
+
+# Source PDFs (HTB Academy's own material, not for redistribution)
+/recon/
