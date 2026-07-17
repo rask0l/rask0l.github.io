@@ -11,3 +11,4 @@ node_modules/
 
 # Source PDFs (HTB Academy's own material, not for redistribution)
 /recon/
+/js_obscu/

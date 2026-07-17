@@ -16,6 +16,9 @@ map. New ones get added as modules get worked through.
 - [Web Fuzzing Cheatsheet](/posts/cheatsheet-web-fuzzing/): directory/file
   fuzzing, parameter fuzzing, vhost fuzzing, ffuf filtering flags, common
   environment gotchas.
+- [JS Deobfuscation Cheatsheet](/posts/cheatsheet-js-deobfuscation/):
+  spotting obfuscation types, beautify vs unpack, code analysis, replaying
+  requests with curl, decoding base64/hex/rot13.
 
 ## Up next
 
