@@ -318,6 +318,44 @@ table.log th:first-child { color: var(--muted); width: 2.5rem; }
 .roadmap li.next { font-style: italic; }
 .roadmap li.next .mark { color: var(--accent); }
 
+.roadmap .by {
+  float: right;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: normal;
+}
+.roadmap li.overdue .by { color: var(--accent); }
+.roadmap li.overdue .mark { color: var(--accent); }
+
+.pace.behind { color: var(--accent); }
+
+.checklist {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+.checklist li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.checklist .mark {
+  display: inline-block;
+  width: 1.4rem;
+  color: var(--muted);
+}
+.checklist.flow .mark { color: var(--accent); }
+.checklist li.done { color: var(--muted); }
+.checklist li.done .mark { color: var(--accent); }
+
+.checklist.fail li { padding-left: 0; }
+.checklist.fail .fail-date {
+  display: inline-block;
+  width: 3.5rem;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ============================================================
    Kali-style terminal window (used via {% include terminal.html %})
    ============================================================ */

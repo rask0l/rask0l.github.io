@@ -1,11 +1,14 @@
 # =============================================================
 # CWES 30-day sprint tracker
-# Edit this one file to update /tracker/. Two rituals:
-#   1. Each study day: append an entry to `log` (copy the last line).
+# Edit this one file to update /tracker/. The rituals:
+#   1. Each study day: append an entry to `log` (copy the last line,
+#      fill in `hours` when you finish so the counter is honest).
 #   2. When you finish a module: flip its roadmap item to `done: true`.
-# The page computes day X/30, days left, %, and "next up" for you.
+#   3. When you clear an exam-prep gate: flip its `done: true`.
+# The page computes day X/30, days left, %, hours, pace, and "next up".
 #
-# The 20 modules of the HTB CWES path, in order.
+# `by:` on a roadmap item = the day you planned to finish it.
+# If today is past that day and it's not done, the page flags it red.
 # =============================================================
 
 start: 2026-07-30        # day 1 of the sprint
@@ -14,6 +17,10 @@ target_days: 30
 log:
   - { day: 1, date: 2026-07-30, focus: "Cross-Site Scripting (XSS)", hours: , status: in progress }
 
+# The 20 modules of the HTB CWES path, in order.
+# The 6 pre-sprint modules have no `by`. The 14 remaining ones carry
+# their planned finish-day from the 30-day allocation (days 24-30 are
+# reserved for review, a practice report, and buffer).
 roadmap:
   - { name: "Web Requests", done: true }
   - { name: "Introduction to Web Applications", done: true }
@@ -21,17 +28,46 @@ roadmap:
   - { name: "Information Gathering - Web Edition", done: true }
   - { name: "Web Fuzzing", done: true }
   - { name: "JavaScript Deobfuscation", done: true }
-  - { name: "Cross-Site Scripting (XSS)", done: false }
-  - { name: "SQL Injection Fundamentals", done: false }
-  - { name: "SQLMap Essentials", done: false }
-  - { name: "Command Injections", done: false }
-  - { name: "File Upload Attacks", done: false }
-  - { name: "Server-Side Attacks", done: false }
-  - { name: "Login Brute Forcing", done: false }
-  - { name: "Broken Authentication", done: false }
-  - { name: "Web Attacks", done: false }
-  - { name: "File Inclusion", done: false }
-  - { name: "Attacking GraphQL", done: false }
-  - { name: "API Attacks", done: false }
-  - { name: "Attacking Common Applications", done: false }
-  - { name: "Bug Bounty Hunting Process", done: false }
+  - { name: "Cross-Site Scripting (XSS)", done: false, by: 2 }
+  - { name: "SQL Injection Fundamentals", done: false, by: 4 }
+  - { name: "SQLMap Essentials", done: false, by: 5 }
+  - { name: "Command Injections", done: false, by: 6 }
+  - { name: "File Upload Attacks", done: false, by: 8 }
+  - { name: "Server-Side Attacks", done: false, by: 9 }
+  - { name: "Login Brute Forcing", done: false, by: 10 }
+  - { name: "Broken Authentication", done: false, by: 11 }
+  - { name: "Web Attacks", done: false, by: 14 }
+  - { name: "File Inclusion", done: false, by: 16 }
+  - { name: "Attacking GraphQL", done: false, by: 17 }
+  - { name: "API Attacks", done: false, by: 18 }
+  - { name: "Attacking Common Applications", done: false, by: 22 }
+  - { name: "Bug Bounty Hunting Process", done: false, by: 23 }
+
+# Your personal "when I get a web app" flow. Refine it as you learn;
+# by day 23 you should be able to write this from memory. On exam day
+# a ticking clock scrambles people, and a checklist keeps you moving.
+methodology:
+  - "Map the app: every page, param, cookie, header (Burp sitemap)"
+  - "Fingerprint the stack: server, framework, versions, WAF"
+  - "Spider + fuzz for hidden dirs, params, and endpoints"
+  - "Test every input for injection: XSS, SQLi, command, template, path"
+  - "Check auth: brute force, weak reset, session handling, IDOR"
+  - "Probe server-side: SSRF, file upload, file inclusion, XXE"
+  - "Chain findings into higher impact (XSS to ATO, LFI to RCE)"
+  - "Screenshot and note every step as you go, in report language"
+
+# The gates that actually decide pass/fail. The hacking rarely fails
+# people; the report and the clock do. Clear these before exam day.
+exam_prep:
+  - { item: "Read the HTB report template end to end", done: false }
+  - { item: "Write ONE full practice report on a retired box", done: false }
+  - { item: "Build the methodology checklist above from memory", done: false }
+  - { item: "Redo the 3 hardest skill assessments with no walkthrough", done: false }
+  - { item: "Keep a failure log; review it every Sunday", done: false }
+
+# Failure log. Every time a box or lab beats you, add the ONE thing you
+# missed (the overlooked param, the bypass you forgot, the enum step you
+# skipped). Review it every Sunday. Your exam mistakes come from here.
+# Add a line like:
+#   - { date: 2026-08-02, note: "Missed the second-order SQLi in the profile update" }
+failures: []

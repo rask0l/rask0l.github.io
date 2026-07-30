@@ -8,6 +8,12 @@ layout: default
 {% assign pct = 0 %}
 {% if total > 0 %}{% assign pct = done | times: 100 | divided_by: total %}{% endif %}
 {% assign next_item = d.roadmap | where: "done", false | first %}
+{% assign total_hours = 0 %}
+{% assign study_days = 0 %}
+{% for e in d.log %}
+  {% if e.hours %}{% assign total_hours = total_hours | plus: e.hours %}{% endif %}
+{% endfor %}
+{% assign study_days = d.log | size %}
 
 <article class="tracker">
   <h1>CWES — 30 day sprint</h1>
@@ -25,6 +31,12 @@ layout: default
 
   <div class="bar"><span style="width: {{ pct }}%"></span></div>
   <p class="bar-label">{{ pct }}% of the roadmap</p>
+
+  <div class="tracker-stat">
+    <strong>{{ total_hours }}h</strong>
+    <span>logged over {{ study_days }} study {% if study_days == 1 %}day{% else %}days{% endif %}</span>
+    <span id="pace" class="pace">· checking pace…</span>
+  </div>
 
   <h2>today</h2>
   {% if next_item %}
@@ -60,12 +72,41 @@ layout: default
         <li class="done"><span class="mark">✓</span>{{ m.name }}</li>
       {% elsif seen_next == false %}
         {% assign seen_next = true %}
-        <li class="next"><span class="mark">▸</span>{{ m.name }}</li>
+        <li class="next" data-by="{{ m.by }}"><span class="mark">▸</span>{{ m.name }}{% if m.by %}<span class="by">by day {{ m.by }}</span>{% endif %}</li>
       {% else %}
-        <li><span class="mark">□</span>{{ m.name }}</li>
+        <li data-by="{{ m.by }}"><span class="mark">□</span>{{ m.name }}{% if m.by %}<span class="by">by day {{ m.by }}</span>{% endif %}</li>
       {% endif %}
     {% endfor %}
   </ul>
+
+  <h2>methodology</h2>
+  <p class="bar-label">Your exam-day flow. Refine it as you learn; write it from memory by day 23.</p>
+  <ul class="checklist flow">
+    {% for step in d.methodology %}
+      <li><span class="mark">▸</span>{{ step }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>exam prep</h2>
+  <p class="bar-label">The gates that decide pass/fail. Clear these before exam day.</p>
+  <ul class="checklist">
+    {% for g in d.exam_prep %}
+      <li class="{% if g.done %}done{% endif %}"><span class="mark">{% if g.done %}✓{% else %}□{% endif %}</span>{{ g.item }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>failure log</h2>
+  <p class="bar-label">Every box that beats you: the one thing you missed. Review it every Sunday.</p>
+  {% assign fails = d.failures | sort: "date" | reverse %}
+  {% if fails and fails != empty %}
+    <ul class="checklist fail">
+      {% for f in fails %}
+        <li><span class="fail-date">{{ f.date | date: "%d %b" }}</span>{{ f.note }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="today" style="font-size:1rem;color:var(--muted);">Nothing logged yet. Good. Add the first miss the moment a lab humbles you.</p>
+  {% endif %}
 </article>
 
 <script>
@@ -81,5 +122,21 @@ layout: default
     var left = Math.max(target - elapsed, 0);
     document.getElementById('day-count').textContent = 'day ' + day + '/' + target;
     document.getElementById('days-left').textContent = '· ' + left + ' days left';
+
+    // Pace: flag any not-done module whose planned day has passed.
+    var overdue = 0, nextDue = null;
+    document.querySelectorAll('.roadmap li[data-by]').forEach(function (li) {
+      var by = parseInt(li.dataset.by, 10);
+      if (!by) return;
+      if (by < day) { li.classList.add('overdue'); overdue++; }
+      if (nextDue === null || by < nextDue) nextDue = by;
+    });
+    var pace = document.getElementById('pace');
+    if (overdue > 0) {
+      pace.textContent = '· ' + overdue + ' module' + (overdue > 1 ? 's' : '') + ' behind schedule';
+      pace.classList.add('behind');
+    } else {
+      pace.textContent = '· on pace' + (nextDue ? ' (next due day ' + nextDue + ')' : '');
+    }
   })();
 </script>
