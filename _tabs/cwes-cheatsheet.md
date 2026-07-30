@@ -1,11 +1,12 @@
 ---
+title: CWES Cheatsheets
 icon: fas fa-clipboard-list
 order: 5
 ---
 
-Index of per-module [cheatsheets](/categories/cheatsheets/) built while
-prepping for the CWES exam. Each module gets its own page; this is just the
-map. New ones get added as modules get worked through.
+Index of per-module cheatsheets built while prepping for the CWES exam.
+Each module gets its own page; this is just the map. New ones get added as
+modules get worked through.
 
 ## Modules covered
 

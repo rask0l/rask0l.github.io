@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if page.noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
+  {% seo %}
+  <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  <link rel="icon" href="{{ '/assets/img/favicons/favicon.ico' | relative_url }}">
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-head">
+      <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <nav class="nav">
+        <a href="{{ '/' | relative_url }}">home</a> //
+        <a href="{{ '/cwes-cheatsheet/' | relative_url }}">cheatsheets</a> //
+        <a href="{{ '/about/' | relative_url }}">about</a> //
+        <a href="https://github.com/{{ site.github.username }}">github</a> //
+        <a href="{{ site.social.links[0] }}">htb</a>
+      </nav>
+    </header>
+
+    <main class="content">
+      {{ content }}
+    </main>
+
+    <footer class="site-foot">
+      {% if site.social.email %}<a href="mailto:{{ site.social.email }}">{{ site.social.email }}</a> · {% endif %}
+      <span>{{ site.title }}</span>
+    </footer>
+  </div>
+</body>
+</html>

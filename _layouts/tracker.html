@@ -1,0 +1,85 @@
+---
+layout: default
+---
+
+{% assign d = site.data.cwes %}
+{% assign total = d.roadmap | size %}
+{% assign done = d.roadmap | where: "done", true | size %}
+{% assign pct = 0 %}
+{% if total > 0 %}{% assign pct = done | times: 100 | divided_by: total %}{% endif %}
+{% assign next_item = d.roadmap | where: "done", false | first %}
+
+<article class="tracker">
+  <h1>CWES — 30 day sprint</h1>
+  <p class="meta" id="tracker-meta"
+     data-start="{{ d.start | date: '%Y-%m-%d' }}"
+     data-target="{{ d.target_days }}">
+    started {{ d.start | date: "%-d %b %Y" }}
+  </p>
+
+  <div class="tracker-stat">
+    <strong id="day-count">day –/{{ d.target_days }}</strong>
+    <span id="days-left">· – days left</span>
+    <span>· {{ done }}/{{ total }} modules</span>
+  </div>
+
+  <div class="bar"><span style="width: {{ pct }}%"></span></div>
+  <p class="bar-label">{{ pct }}% of the roadmap</p>
+
+  <h2>today</h2>
+  {% if next_item %}
+    <p class="today">▸ {{ next_item.name }}</p>
+  {% else %}
+    <p class="today">roadmap complete — revise weak spots and drill labs.</p>
+  {% endif %}
+
+  <h2>log</h2>
+  {% assign logs = d.log | sort: "day" | reverse %}
+  <table class="log">
+    <thead>
+      <tr><th>day</th><th>date</th><th>focus</th><th>hrs</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for e in logs %}
+      <tr>
+        <td>{{ e.day }}</td>
+        <td>{{ e.date | date: "%d %b" }}</td>
+        <td>{{ e.focus }}</td>
+        <td>{% if e.hours %}{{ e.hours }}h{% else %}·{% endif %}</td>
+        <td>{% if e.status == "done" %}✓{% else %}{{ e.status }}{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>roadmap</h2>
+  {% assign seen_next = false %}
+  <ul class="roadmap">
+    {% for m in d.roadmap %}
+      {% if m.done %}
+        <li class="done"><span class="mark">✓</span>{{ m.name }}</li>
+      {% elsif seen_next == false %}
+        {% assign seen_next = true %}
+        <li class="next"><span class="mark">▸</span>{{ m.name }}</li>
+      {% else %}
+        <li><span class="mark">□</span>{{ m.name }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</article>
+
+<script>
+  (function () {
+    var meta = document.getElementById('tracker-meta');
+    if (!meta) return;
+    var start = new Date(meta.dataset.start + 'T00:00:00');
+    var target = parseInt(meta.dataset.target, 10);
+    var oneDay = 86400000;
+    var elapsed = Math.floor((Date.now() - start.getTime()) / oneDay) + 1;
+    if (elapsed < 1) elapsed = 1;
+    var day = Math.min(elapsed, target);
+    var left = Math.max(target - elapsed, 0);
+    document.getElementById('day-count').textContent = 'day ' + day + '/' + target;
+    document.getElementById('days-left').textContent = '· ' + left + ' days left';
+  })();
+</script>

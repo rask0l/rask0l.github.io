@@ -168,12 +168,12 @@ exclude:
   - purgecss.js
   - "*.config.js"
   - "package*.json"
+  # Local-only source material (HTB PDFs), never publish even on a local build
+  - recon
+  - js_obscu
+  - xss
 
+# jekyll-archives disabled: the minimal theme lists posts on the home page
+# grouped by category, so per-tag / per-category browse pages aren't used.
 jekyll-archives:
-  enabled: [categories, tags]
-  layouts:
-    category: category
-    tag: tag
-  permalinks:
-    tag: /tags/:name/
-    category: /categories/:name/
+  enabled: []
