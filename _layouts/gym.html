@@ -1,0 +1,383 @@
+---
+layout: default
+---
+
+{% assign g = site.data.gym %}
+
+<article class="tracker gym">
+  <h1>{{ g.title }}</h1>
+
+  <div class="gym-stats" id="gym-stats"></div>
+
+  <h2>split</h2>
+  <p class="bar-label">Tick a day when it's done. Edit any focus label inline. Both save in this browser.</p>
+  <div class="split-row">
+    <ul class="roadmap split" id="gym-split">
+      {% for s in g.split %}
+        <li data-dow="{{ s.dow }}" data-day="{{ s.day }}">
+          <input type="checkbox" class="tick" aria-label="{{ s.day }} done">
+          <span class="day">{{ s.day }}</span>
+          <input class="focus" type="text" spellcheck="false" value="{{ s.focus }}">
+        </li>
+      {% endfor %}
+    </ul>
+    <figure class="split-photo">
+      <img src="{{ '/assets/img/d5add76c03f514bbc39fc30e9ef8098b.jpg' | relative_url }}"
+           alt="Classic gym portrait" loading="lazy">
+    </figure>
+  </div>
+
+  <h2>working weights</h2>
+  <p class="bar-label">Everything here is editable: rename a lift, change sets×reps, tap − / + or type a weight, and use ▲ ▼ to reorder. Saved in this browser as you go.</p>
+  <div class="lifts-grid">
+  {% for w in g.workouts %}
+    {% assign wi = forloop.index0 %}
+    <div class="lift-block" data-workout="w{{ wi }}">
+    <h3>{{ w.name }}</h3>
+    <table class="log lifts">
+      <thead>
+        <tr><th></th><th>exercise</th><th>sets×reps</th><th>kg</th><th>trend</th></tr>
+      </thead>
+      <tbody>
+        {% for ex in w.exercises %}
+        <tr data-id="w{{ wi }}-e{{ forloop.index0 }}" data-workout="w{{ wi }}">
+          <td class="reorder">
+            <button class="mv up" type="button" aria-label="move up">▲</button>
+            <button class="mv down" type="button" aria-label="move down">▼</button>
+          </td>
+          <td><input class="ex-name" type="text" spellcheck="false" value="{{ ex.name }}"></td>
+          <td class="sr-cell">
+            <input class="ex-sets" type="text" inputmode="numeric" value="{{ ex.sets }}">
+            <span class="x">×</span>
+            <input class="ex-reps" type="text" value="{{ ex.reps }}">
+          </td>
+          <td class="wt-cell">
+            <button class="step down" type="button" aria-label="decrease">−</button>
+            <input class="wt" type="text" inputmode="decimal" spellcheck="false" value="{{ ex.kg }}">
+            <button class="step up" type="button" aria-label="increase">+</button>
+          </td>
+          <td class="spark-cell"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  {% endfor %}
+  </div>
+
+  <h2>session log</h2>
+  <p class="bar-label">Log each workout. Sleep is hours the night before; bodyweight in kg.</p>
+  <form id="session-form" class="gym-form" autocomplete="off">
+    <label>date<input type="date" name="date"></label>
+    <label>day
+      <select name="day">
+        {% for w in g.workouts %}<option>{{ w.name }}</option>{% endfor %}
+        <option>Other</option>
+      </select>
+    </label>
+    <label>sleep (h)<input type="number" name="sleep" step="0.5" min="0" max="14" placeholder="7.5"></label>
+    <label>bw (kg)<input type="number" name="bw" step="0.1" min="0" placeholder="—"></label>
+    <label class="grow">notes<input type="text" name="notes" placeholder="PR, how it felt…"></label>
+    <button type="submit" class="add">add</button>
+  </form>
+
+  <table class="log sessions">
+    <thead>
+      <tr><th>date</th><th>day</th><th>sleep</th><th>bw</th><th>notes</th><th></th></tr>
+    </thead>
+    <tbody id="session-body"></tbody>
+  </table>
+
+  <details class="gym-data">
+    <summary>backup · import · reset</summary>
+    <p class="bar-label">Your data lives only in this browser. Export the JSON to back it up, keep a copy in the repo, or move it to another device.</p>
+    <textarea id="gym-dump" spellcheck="false" placeholder="Click export to dump your data here, or paste a backup and click import."></textarea>
+    <div class="gym-data-btns">
+      <button type="button" id="gym-export">export</button>
+      <button type="button" id="gym-import">import</button>
+      <button type="button" id="gym-reset" class="danger">reset</button>
+    </div>
+  </details>
+
+  <figure class="gym-gif">
+    <img src="{{ '/assets/img/gSEQNCG.gif' | relative_url }}"
+         alt="Make your dreams a reality, rep by rep" loading="lazy">
+  </figure>
+</article>
+
+<script>
+(function () {
+  var KEY = 'gym-tracker-v1';
+  var STEP = 2.5;
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function isoToday(){ var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  function fmtDate(iso){
+    var p = (iso || '').split('-');
+    if (p.length !== 3) return iso || '';
+    return parseInt(p[2],10) + ' ' + MONTHS[parseInt(p[1],10)-1];
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c];
+    });
+  }
+  function numFrom(v){
+    var m = String(v).match(/-?\d+(\.\d+)?/);
+    return m ? parseFloat(m[0]) : NaN;
+  }
+  function round2(n){ return Math.round(n * 100) / 100; }
+
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  var state = load();
+  state.ex = state.ex || {};
+  state.exOrder = state.exOrder || {};
+  state.history = state.history || {};
+  state.sessions = state.sessions || [];
+  state.split = state.split || {};
+
+  // ---- working weights: editable name/sets/reps/kg, reorderable ----
+  function recordHistory(id, val){
+    var num = numFrom(val);
+    if (isNaN(num)) return;
+    var h = state.history[id] = state.history[id] || [];
+    var last = h[h.length - 1];
+    var today = isoToday();
+    if (last && last.kg === num) return;
+    if (last && last.d === today) last.kg = num;
+    else h.push({ d: today, kg: num });
+  }
+
+  function renderSpark(tr){
+    var cell = tr.querySelector('.spark-cell');
+    var h = state.history[tr.dataset.id] || [];
+    var nums = h.map(function(p){ return p.kg; });
+    if (nums.length < 2){ cell.innerHTML = '<span class="spark-none">·</span>'; return; }
+    var min = Math.min.apply(null, nums), max = Math.max.apply(null, nums);
+    var w = 60, ht = 20, p = 3, span = (max - min) || 1;
+    var pts = nums.map(function(n, i){
+      var x = p + i * (w - 2*p) / (nums.length - 1);
+      var y = (ht - p) - (n - min) / span * (ht - 2*p);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+    var delta = round2(nums[nums.length-1] - nums[0]);
+    var cls = delta > 0 ? 'up' : (delta < 0 ? 'down' : 'flat');
+    var sign = delta > 0 ? '+' : '';
+    cell.innerHTML =
+      '<svg class="spark" viewBox="0 0 ' + w + ' ' + ht + '" width="' + w + '" height="' + ht + '">' +
+      '<polyline points="' + pts + '"/></svg>' +
+      '<span class="delta ' + cls + '">' + sign + delta + '</span>';
+  }
+
+  function rowData(tr){
+    return {
+      name: tr.querySelector('.ex-name').value.trim(),
+      sets: tr.querySelector('.ex-sets').value.trim(),
+      reps: tr.querySelector('.ex-reps').value.trim(),
+      kg:   tr.querySelector('.wt').value.trim()
+    };
+  }
+  function commitRow(tr){
+    var d = rowData(tr);
+    state.ex[tr.dataset.id] = d;
+    recordHistory(tr.dataset.id, d.kg);
+    save();
+    renderSpark(tr);
+  }
+
+  function bump(input, delta){
+    var v = input.value;
+    var m = v.match(/-?\d+(\.\d+)?/);
+    if (!m) return;
+    var num = parseFloat(m[0]) + delta;
+    if (num < 0) num = 0;
+    input.value = v.slice(0, m.index) + round2(num) + v.slice(m.index + m[0].length);
+    commitRow(input.closest('tr'));
+  }
+
+  function refreshArrows(wid){
+    var rows = document.querySelectorAll('tr[data-workout="' + wid + '"]');
+    rows.forEach(function(tr, i){
+      tr.querySelector('.mv.up').disabled = (i === 0);
+      tr.querySelector('.mv.down').disabled = (i === rows.length - 1);
+    });
+  }
+  function persistOrder(wid){
+    var order = [];
+    document.querySelectorAll('tr[data-workout="' + wid + '"]').forEach(function(tr){ order.push(tr.dataset.id); });
+    state.exOrder[wid] = order;
+    save();
+    refreshArrows(wid);
+  }
+  function move(tr, dir){
+    var tbody = tr.parentNode;
+    if (dir < 0 && tr.previousElementSibling) tbody.insertBefore(tr, tr.previousElementSibling);
+    else if (dir > 0 && tr.nextElementSibling) tbody.insertBefore(tr.nextElementSibling, tr);
+    persistOrder(tr.dataset.workout);
+  }
+
+  // apply saved field values
+  document.querySelectorAll('tr[data-id]').forEach(function(tr){
+    var saved = state.ex[tr.dataset.id];
+    if (saved){
+      if (saved.name !== undefined) tr.querySelector('.ex-name').value = saved.name;
+      if (saved.sets !== undefined) tr.querySelector('.ex-sets').value = saved.sets;
+      if (saved.reps !== undefined) tr.querySelector('.ex-reps').value = saved.reps;
+      if (saved.kg   !== undefined) tr.querySelector('.wt').value = saved.kg;
+    }
+    if (!state.history[tr.dataset.id]){
+      var num = numFrom(tr.querySelector('.wt').value);
+      if (!isNaN(num)) state.history[tr.dataset.id] = [{ d: isoToday(), kg: num }];
+    }
+  });
+
+  // apply saved order
+  Object.keys(state.exOrder).forEach(function(wid){
+    var tbody = document.querySelector('.lift-block[data-workout="' + wid + '"] tbody');
+    if (!tbody) return;
+    state.exOrder[wid].forEach(function(id){
+      var tr = tbody.querySelector('tr[data-id="' + id + '"]');
+      if (tr) tbody.appendChild(tr);
+    });
+  });
+
+  // wire rows
+  document.querySelectorAll('tr[data-id]').forEach(function(tr){
+    renderSpark(tr);
+    tr.querySelectorAll('.ex-name, .ex-sets, .ex-reps').forEach(function(inp){
+      inp.addEventListener('change', function(){ commitRow(tr); });
+    });
+    var wt = tr.querySelector('.wt');
+    wt.addEventListener('change', function(){ commitRow(tr); });
+    wt.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); wt.blur(); } });
+    tr.querySelector('.step.down').addEventListener('click', function(){ bump(wt, -STEP); });
+    tr.querySelector('.step.up').addEventListener('click', function(){ bump(wt, STEP); });
+    tr.querySelector('.mv.up').addEventListener('click', function(){ move(tr, -1); });
+    tr.querySelector('.mv.down').addEventListener('click', function(){ move(tr, 1); });
+  });
+  document.querySelectorAll('.lift-block').forEach(function(b){ refreshArrows(b.dataset.workout); });
+  save();
+
+  // ---- sessions ----
+  var form = document.getElementById('session-form');
+  var body = document.getElementById('session-body');
+  form.date.value = isoToday();
+
+  function sortedSessions(){
+    return state.sessions.slice().sort(function(a, b){
+      if (a.date === b.date) return b.id - a.id;
+      return a.date < b.date ? 1 : -1;
+    });
+  }
+
+  function renderSessions(){
+    var rows = sortedSessions();
+    if (!rows.length){
+      body.innerHTML = '<tr><td colspan="6" class="empty">No sessions yet. Log your first workout above.</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(function(s){
+      return '<tr>' +
+        '<td>' + fmtDate(s.date) + '</td>' +
+        '<td>' + esc(s.day) + '</td>' +
+        '<td>' + (s.sleep ? esc(s.sleep) + 'h' : '·') + '</td>' +
+        '<td>' + (s.bw ? esc(s.bw) + 'kg' : '·') + '</td>' +
+        '<td class="note">' + esc(s.notes || '') + '</td>' +
+        '<td><button class="del" data-id="' + s.id + '" title="delete">✕</button></td>' +
+        '</tr>';
+    }).join('');
+    body.querySelectorAll('.del').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = parseInt(btn.dataset.id, 10);
+        state.sessions = state.sessions.filter(function(x){ return x.id !== id; });
+        save(); renderSessions(); renderStats();
+      });
+    });
+  }
+
+  function renderStats(){
+    var ss = state.sessions;
+    var sleeps = ss.map(function(s){ return parseFloat(s.sleep); }).filter(function(x){ return !isNaN(x); });
+    var avg = sleeps.length ? sleeps.reduce(function(a, b){ return a + b; }, 0) / sleeps.length : null;
+    var lastBw = null, sorted = sortedSessions();
+    for (var i = 0; i < sorted.length; i++){ if (sorted[i].bw){ lastBw = sorted[i].bw; break; } }
+    var wk = 0, now = Date.now();
+    ss.forEach(function(s){ if (now - new Date(s.date).getTime() <= 7 * 864e5) wk++; });
+    document.getElementById('gym-stats').innerHTML =
+      stat(ss.length, 'sessions') +
+      stat(avg !== null ? (Math.round(avg * 10) / 10) + 'h' : '—', 'avg sleep') +
+      stat(lastBw ? lastBw + 'kg' : '—', 'bodyweight') +
+      stat(wk, 'this week');
+  }
+  function stat(v, l){ return '<div class="stat"><strong>' + v + '</strong><span>' + l + '</span></div>'; }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    state.sessions.unshift({
+      id: Date.now(),
+      date: form.date.value || isoToday(),
+      day: form.day.value,
+      sleep: form.sleep.value,
+      bw: form.bw.value,
+      notes: form.notes.value.trim()
+    });
+    save(); renderSessions(); renderStats();
+    form.reset(); form.date.value = isoToday(); form.day.focus();
+  });
+
+  // ---- backup / import / reset ----
+  var dump = document.getElementById('gym-dump');
+  document.getElementById('gym-export').addEventListener('click', function(){
+    dump.value = JSON.stringify(state, null, 2); dump.focus(); dump.select();
+  });
+  document.getElementById('gym-import').addEventListener('click', function(){
+    try {
+      var s = JSON.parse(dump.value);
+      localStorage.setItem(KEY, JSON.stringify(s));
+      location.reload();
+    } catch (err) { alert('That is not valid JSON.'); }
+  });
+  document.getElementById('gym-reset').addEventListener('click', function(){
+    if (confirm('Reset all gym data in this browser? This cannot be undone.')){
+      localStorage.removeItem(KEY); location.reload();
+    }
+  });
+
+  // ---- split (tick + editable focus) ----
+  function markRest(li, val){
+    var rest = !val || val.trim().toLowerCase() === 'rest';
+    li.classList.toggle('rest', rest);
+  }
+  document.querySelectorAll('#gym-split li').forEach(function(li){
+    var day = li.dataset.day;
+    var saved = state.split[day] || {};
+    var tick = li.querySelector('.tick');
+    var focus = li.querySelector('.focus');
+    if (saved.focus !== undefined) focus.value = saved.focus;
+    if (saved.done){ tick.checked = true; li.classList.add('done'); }
+    markRest(li, focus.value);
+    tick.addEventListener('change', function(){
+      state.split[day] = state.split[day] || {};
+      state.split[day].done = tick.checked;
+      li.classList.toggle('done', tick.checked);
+      save();
+    });
+    focus.addEventListener('change', function(){
+      state.split[day] = state.split[day] || {};
+      state.split[day].focus = focus.value;
+      markRest(li, focus.value);
+      save();
+    });
+  });
+
+  // ---- today highlight ----
+  var todayRow = document.querySelector('#gym-split li[data-dow="' + new Date().getDay() + '"]');
+  if (todayRow) todayRow.classList.add('next');
+
+  renderSessions();
+  renderStats();
+})();
+</script>

@@ -15,7 +15,16 @@ layout: default
 {% endfor %}
 {% assign study_days = d.log | size %}
 
-<article class="tracker">
+<img class="tracker-cover" src="{{ '/assets/img/DIFNM.png' | relative_url }}"
+     alt="Night drive, headlights on an empty road">
+
+<div class="tracker-flank">
+  <figure class="flank flank-left">
+    <img class="flank-img" src="{{ '/assets/img/1.jpg' | relative_url }}"
+         alt="A student studying late by candlelight" loading="lazy">
+  </figure>
+
+  <article class="tracker">
   <h1>CWES — 30 day sprint</h1>
   <p class="meta" id="tracker-meta"
      data-start="{{ d.start | date: '%Y-%m-%d' }}"
@@ -107,7 +116,14 @@ layout: default
   {% else %}
     <p class="today" style="font-size:1rem;color:var(--muted);">Nothing logged yet. Good. Add the first miss the moment a lab humbles you.</p>
   {% endif %}
-</article>
+  </article>
+
+  <figure class="flank flank-right">
+    <img class="flank-img" src="{{ '/assets/img/t.jpg' | relative_url }}"
+         alt="A lone swordsman resting, blade in hand" loading="lazy">
+    <figcaption>Sharpen the blade daily. Show up tomorrow.</figcaption>
+  </figure>
+</div>
 
 <script>
   (function () {
