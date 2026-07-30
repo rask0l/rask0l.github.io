@@ -19,8 +19,8 @@
     --fg: #e7e7e7;
     --muted: #8f8f8f;
     --rule: #2a2a2a;
-    --accent: #d98b8b;
-    --accent-hover: #f0b3b3;
+    --accent: #e5484b;
+    --accent-hover: #ff6b6e;
     --code-bg: #1b1b1b;
   }
 }
@@ -404,8 +404,6 @@ table.log th:first-child { color: var(--muted); width: 2.5rem; }
   .flank {
     max-width: none;
     margin: 0;
-    position: sticky;
-    top: 1.5rem;
   }
   .flank-left  { justify-self: end; }
   .flank-right { justify-self: start; }
@@ -510,7 +508,7 @@ input.focus:focus { outline: none; border-color: var(--accent); }
 /* editable exercise name + sets/reps */
 input.ex-name {
   width: 100%;
-  min-width: 6rem;
+  min-width: 11rem;
   padding: 0.2rem 0.35rem;
   background: var(--bg);
   color: var(--fg);
@@ -537,22 +535,17 @@ input.ex-name:focus,
 input.ex-sets:focus,
 input.ex-reps:focus { outline: none; border-color: var(--accent); }
 
-/* Upper A / B side by side, stretched wider than the text column */
+/* Upper A stacked on top of Upper B, widened past the text column */
 .lift-block table.lifts { width: 100%; }
 .lift-block { overflow-x: auto; }
-@media (min-width: 1024px) {
+.lift-block + .lift-block { margin-top: 1.75rem; }
+@media (min-width: 860px) {
   .lifts-grid {
-    width: min(1160px, 100vw);
-    margin-left: calc(50% - min(1160px, 100vw) / 2);
+    width: min(880px, 100vw);
+    margin-left: calc(50% - min(880px, 100vw) / 2);
     box-sizing: border-box;
     padding: 0 1.25rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    align-items: start;
   }
-  .lift-block { min-width: 0; }
-  .lift-block h3 { margin-top: 0; }
 }
 
 /* editable weight cell */
@@ -635,6 +628,17 @@ svg.spark polyline { fill: none; stroke: var(--accent); stroke-width: 1.5; }
   font: inherit;
 }
 .gym-form .add:hover { background: var(--accent-hover); }
+
+/* session log widened past the text column */
+.sessions-wide table.sessions { display: table; width: 100%; }
+@media (min-width: 860px) {
+  .sessions-wide {
+    width: min(880px, 100vw);
+    margin-left: calc(50% - min(880px, 100vw) / 2);
+    box-sizing: border-box;
+    padding: 0 1.25rem;
+  }
+}
 
 /* session table */
 table.sessions .note { color: var(--muted); }

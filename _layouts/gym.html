@@ -10,7 +10,6 @@ layout: default
   <div class="gym-stats" id="gym-stats"></div>
 
   <h2>split</h2>
-  <p class="bar-label">Tick a day when it's done. Edit any focus label inline. Both save in this browser.</p>
   <div class="split-row">
     <ul class="roadmap split" id="gym-split">
       {% for s in g.split %}
@@ -28,7 +27,6 @@ layout: default
   </div>
 
   <h2>working weights</h2>
-  <p class="bar-label">Everything here is editable: rename a lift, change sets×reps, tap − / + or type a weight, and use ▲ ▼ to reorder. Saved in this browser as you go.</p>
   <div class="lifts-grid">
   {% for w in g.workouts %}
     {% assign wi = forloop.index0 %}
@@ -66,7 +64,7 @@ layout: default
   </div>
 
   <h2>session log</h2>
-  <p class="bar-label">Log each workout. Sleep is hours the night before; bodyweight in kg.</p>
+  <div class="sessions-wide">
   <form id="session-form" class="gym-form" autocomplete="off">
     <label>date<input type="date" name="date"></label>
     <label>day
@@ -87,6 +85,7 @@ layout: default
     </thead>
     <tbody id="session-body"></tbody>
   </table>
+  </div>
 
   <details class="gym-data">
     <summary>backup · import · reset</summary>

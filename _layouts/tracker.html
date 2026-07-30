@@ -88,22 +88,6 @@ layout: default
     {% endfor %}
   </ul>
 
-  <h2>methodology</h2>
-  <p class="bar-label">Your exam-day flow. Refine it as you learn; write it from memory by day 23.</p>
-  <ul class="checklist flow">
-    {% for step in d.methodology %}
-      <li><span class="mark">▸</span>{{ step }}</li>
-    {% endfor %}
-  </ul>
-
-  <h2>exam prep</h2>
-  <p class="bar-label">The gates that decide pass/fail. Clear these before exam day.</p>
-  <ul class="checklist">
-    {% for g in d.exam_prep %}
-      <li class="{% if g.done %}done{% endif %}"><span class="mark">{% if g.done %}✓{% else %}□{% endif %}</span>{{ g.item }}</li>
-    {% endfor %}
-  </ul>
-
   <h2>failure log</h2>
   <p class="bar-label">Every box that beats you: the one thing you missed. Review it every Sunday.</p>
   {% assign fails = d.failures | sort: "date" | reverse %}
