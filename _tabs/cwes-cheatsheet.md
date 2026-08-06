@@ -20,12 +20,15 @@ modules get worked through.
 - [JS Deobfuscation Cheatsheet](/posts/cheatsheet-js-deobfuscation/):
   spotting obfuscation types, beautify vs unpack, code analysis, replaying
   requests with curl, decoding base64/hex/rot13.
+- [XSS Cheatsheet](/posts/cheatsheet-xss/): the three types (stored,
+  reflected, DOM), test payloads, source/sink, discovery, and the attack
+  chains (defacing, phishing, blind XSS to session hijacking) plus prevention.
 
 ## Up next
 
 - HTTP fundamentals
 - Injection (SQLi, command injection, XXE, SSTI)
-- XSS and CSRF
+- CSRF
 - Authentication and session handling (JWT, OAuth, IDOR)
 - File upload, LFI/RFI
 - SSRF
